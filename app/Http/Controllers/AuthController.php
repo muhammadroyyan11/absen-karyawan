@@ -15,7 +15,7 @@ class AuthController extends Controller
     public function prosesLogin(Request $request)
     {
         if (Auth::guard('web')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
-            echo 'success';
+            return redirect('/dashboard');
         } else {
             echo 'gagal';
         }

@@ -17,7 +17,17 @@ class AuthController extends Controller
         if (Auth::guard('web')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
             return redirect('/dashboard');
         } else {
-            echo 'gagal';
+            return redirect('/')->with(['warning' => 'NIK / Password Salah']);
+        }
+    }
+
+    public function logout()
+    {
+        if (Auth::guard('web')->check()){
+            Auth::guard('web')->logout();
+            return redirect('/');
+        } else {
+            return redirect('/');
         }
     }
 }

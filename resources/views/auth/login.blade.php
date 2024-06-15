@@ -38,6 +38,14 @@
                 <h4>Fill the form to log in</h4>
             </div>
             <div class="section mt-1 mb-5">
+                @php
+                    $messageWarning = Session::get('warning');
+                @endphp
+                @if(Session::get('warning'))
+                    <div class="alert alert-outline-danger">
+                        {{ $messageWarning }}
+                    </div>
+                @endif
                 <form action="/prosesLogin" method="post">
                     @csrf
                     <div class="form-group boxed">

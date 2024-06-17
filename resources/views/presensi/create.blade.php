@@ -22,10 +22,18 @@
     </div>
     <div class="row">
         <div class="col">
-            <button id="take" class="btn btn-primary btn-block">
-                <ion-icon name="camera-outline"></ion-icon>
-                Absen
-            </button>
+            @if($data['check'] > 0)
+                <button id="absen" class="btn btn-primary btn-block">
+                    <ion-icon name="camera-outline"></ion-icon>
+                    Absen Pulang
+                </button>
+            @else
+                <button id="absen" class="btn btn-primary btn-block">
+                    <ion-icon name="camera-outline"></ion-icon>
+                    Absen Masuk
+                </button>
+            @endif
+
         </div>
     </div>
     <div class="row mt-2">
@@ -63,13 +71,50 @@
 
             var circle = L.circle([coordinate.coords.latitude, coordinate.coords.longitude], {
                 color: 'red',
-                fillColor: '#f03',
+                fillColor: 'rgba(11,253,0,0.13)',
                 fillOpacity: 0.5,
                 radius: 20
             }).addTo(map);
         }
 
         function errorCallback() {
+
         }
+
+        $('#absen').click(function (e){
+           Webcam.snap(function (uri){
+               image = uri;
+           });
+
+            var lokasi = $('#lokasi').val();
+            $.ajax({
+                type: 'POST',
+                url: '/presensi/store',
+                data: {
+                    _token: "{{csrf_token()}}",
+                    image: image,
+                    lokasi: lokasi
+                },
+                cache: false,
+                success: function (respon){
+                   // if(respon.code == 200){
+                   //     Swal.fire({
+                   //         title: 'Berhasil !',
+                   //         text: respon.status,
+                   //         icon: 'success'
+                   //     });
+                   //     setTimeout("location.href='/dashboard'", 3000);
+                   // } else {
+                   //     Swal.fire({
+                   //         title: 'Error!',
+                   //         text: 'Coba lakukan absen lagi',
+                   //         icon: 'error',
+                   //         confirmButtonText: 'OK'
+                   //     });
+                   // }
+                }
+            });
+           //  console.log('tes');
+        });
     </script>
 @endpush

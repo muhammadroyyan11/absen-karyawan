@@ -26,6 +26,7 @@ Route::middleware(['auth:web'])->group(function (){
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/presensi/create', [PresensiController::class, 'create']);
+    Route::post('/presensi/store', [PresensiController::class, 'store']);
 
 });
 //Route::get('/dashboard', [DashboardController::class, 'index']);

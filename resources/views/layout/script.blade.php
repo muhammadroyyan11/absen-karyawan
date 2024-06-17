@@ -1,5 +1,3 @@
-
-<!-- ///////////// Js Files ////////////////////  -->
 <!-- Jquery -->
 <script src="{{asset('assets/js/lib/jquery-3.4.1.min.js')}}"></script>
 <!-- Bootstrap-->
@@ -21,6 +19,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js" integrity="sha512-dQIiHSl2hr3NWKKLycPndtpbh5iaHLo6MwrXm7F0FM5e+kL2U16oE9uIwPHUl6fQBeCthiEuV/rzP3MiAB8Vfw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- Make sure you put this AFTER Leaflet's CSS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{{--Sweetalert2--}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 

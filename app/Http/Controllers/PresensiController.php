@@ -46,8 +46,7 @@ class PresensiController extends Controller
             ];
 
             $action = DB::table('presensi')->where('u_id', $u_id)->where('tgl_presensi', $tgl_presensi)->update($params);
-            $r['status'] = 'Pulang';
-            $r['code'] = '200';
+            echo 'success|Terima Kasih, Hati Hati Di Jalan|out';
 
         } else {
             $params = [
@@ -59,14 +58,13 @@ class PresensiController extends Controller
             ];
 
             $action = DB::table('presensi')->insert($params);
-            $r['status'] = 'Masuk';
-            $r['code'] = '200';
+            echo 'success|Terima Kasih, Selamat Bekerja|in';
         }
 
         if ($action){
             Storage::put($file,$image_base64);
         }
 
-        return json_encode($r);
+//        return json_encode($r);
     }
 }

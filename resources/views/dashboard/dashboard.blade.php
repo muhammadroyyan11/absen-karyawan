@@ -97,7 +97,7 @@
     </div>
 
     <div class="rekappresence">
-        <div id="chartdiv"></div>
+{{--        <div id="chartdiv"></div>--}}
         <!-- <div class="row">
             <div class="col-6">
                 <div class="card">

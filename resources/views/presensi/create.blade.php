@@ -97,21 +97,22 @@
                 },
                 cache: false,
                 success: function (respon){
-                   // if(respon.code == 200){
-                   //     Swal.fire({
-                   //         title: 'Berhasil !',
-                   //         text: respon.status,
-                   //         icon: 'success'
-                   //     });
-                   //     setTimeout("location.href='/dashboard'", 3000);
-                   // } else {
-                   //     Swal.fire({
-                   //         title: 'Error!',
-                   //         text: 'Coba lakukan absen lagi',
-                   //         icon: 'error',
-                   //         confirmButtonText: 'OK'
-                   //     });
-                   // }
+                    var status = respon.split('|');
+                   if(status[0] == 'success'){
+                       Swal.fire({
+                           title: 'Berhasil !',
+                           text: status[1],
+                           icon: 'success'
+                       });
+                       setTimeout("location.href='/dashboard'", 3000);
+                   } else {
+                       Swal.fire({
+                           title: 'Error!',
+                           text: 'Silahkan hubungi IT',
+                           icon: 'error',
+                           confirmButtonText: 'OK'
+                       });
+                   }
                 }
             });
            //  console.log('tes');

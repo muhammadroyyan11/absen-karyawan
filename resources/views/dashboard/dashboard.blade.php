@@ -6,7 +6,7 @@
                 <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
             </div>
             <div id="user-info">
-                <h2 id="user-name">{{ Auth::user()->name }}</h2>
+                <h3 id="user-name">{{ Auth::user()->name }}</h3>
                 <span id="user-role">{{ Auth::user()->jabatan }}</span>
             </div>
         </div>
@@ -116,8 +116,10 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 16px 12px !important;">
-                            <span class="badge badge-danger" style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">{{$data['hadir']->jmlhadir}}</span>
-                            <ion-icon name="accessibility-outline" style="font-size: 1.6rem;" class="text-primary"></ion-icon>
+                            <span class="badge badge-danger"
+                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">{{$data['hadir']->jmlhadir}}</span>
+                            <ion-icon name="accessibility-outline" style="font-size: 1.6rem;"
+                                      class="text-primary"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem">Kehadiran</span>
                         </div>
@@ -126,8 +128,10 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 16px 12px !important;">
-                            <span class="badge badge-danger" style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">0</span>
-                            <ion-icon name="newspaper-outline" style="font-size: 1.6rem;" class="text-success"></ion-icon>
+                            <span class="badge badge-danger"
+                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">0</span>
+                            <ion-icon name="newspaper-outline" style="font-size: 1.6rem;"
+                                      class="text-success"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem">Cuti</span>
                         </div>
@@ -136,7 +140,8 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 16px 12px !important;">
-                            <span class="badge badge-danger" style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">0</span>
+                            <span class="badge badge-danger"
+                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">0</span>
                             <ion-icon name="medkit-outline" style="font-size: 1.6rem;" class="text-warning"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem">Sakit</span>
@@ -146,7 +151,8 @@
                 <div class="col-3">
                     <div class="card">
                         <div class="card-body text-center" style="padding: 16px 12px !important;">
-                            <span class="badge badge-danger" style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">{{$data['hadir']->jmltelat}}</span>
+                            <span class="badge badge-danger"
+                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">{{$data['hadir']->jmltelat}}</span>
                             <ion-icon name="time-outline" style="font-size: 1.6rem;" class="text-danger"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem">Terlambat</span>
@@ -183,10 +189,9 @@
                                     <div class="in">
                                         <div>{{ \Carbon\Carbon::parse($d->tgl_presensi)->locale('id')->translatedFormat('d F Y') }}</div>
                                         <div>
-                                            <div>
-                                                <span class="badge badge-success">{{ $d->jam_in  }}</span>
-                                            </div>
-                                            <span class="badge badge-danger">{{ $d->jam_out != null ? $d->jam_out : 'Belum absen' }}</span>
+                                            <span class="badge badge-success">{{ $d->jam_in  }}</span>
+                                            <span
+                                                class="badge badge-danger">{{ $d->jam_out != null ? $d->jam_out : 'Belum absen' }}</span>
                                         </div>
                                     </div>
                                 </div>

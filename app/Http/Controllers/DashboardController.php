@@ -30,6 +30,24 @@ class DashboardController extends Controller
             ->orderBy('tgl_presensi', 'asc')
             ->first();
 
+        $cuti      = DB::table('pengajuan_cuti')
+            ->selectRaw('COUNT(u_id) as jmlcuti')
+            ->where('u_id', $id_user)
+            ->where('status', 'i')
+            ->whereRaw('MONTH(tgl_izin)="' . $month . '"')
+            ->whereRaw('YEAR(tgl_izin)="' . $year . '"')
+            ->orderBy('tgl_izin', 'asc')
+            ->first();
+
+        $sakit      = DB::table('pengajuan_cuti')
+            ->selectRaw('COUNT(u_id) as jmlsakit')
+            ->where('u_id', $id_user)
+            ->where('status', 's')
+            ->whereRaw('MONTH(tgl_izin)="' . $month . '"')
+            ->whereRaw('YEAR(tgl_izin)="' . $year . '"')
+            ->orderBy('tgl_izin', 'asc')
+            ->first();
+
         $terlambat   = DB::table('presensi')
             ->where('u_id', $id_user)
             ->whereRaw('TIME(jam_in) > ?', ['08:00:00'])
@@ -42,7 +60,9 @@ class DashboardController extends Controller
             'presensiHarian'    => DB::table('presensi')->where('u_id', $id_user)->where('tgl_presensi', $today)->first(),
             'history'           => $history,
             'terlambat'         => $terlambat,
-            'hadir'             => $hadir
+            'hadir'             => $hadir,
+            'cuti'              => $cuti,
+            'sakit'              => $sakit
         ];
 
 //        dd($terlambat);

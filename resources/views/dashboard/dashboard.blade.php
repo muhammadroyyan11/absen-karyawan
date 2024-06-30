@@ -129,7 +129,7 @@
                     <div class="card">
                         <div class="card-body text-center" style="padding: 16px 12px !important;">
                             <span class="badge badge-danger"
-                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">0</span>
+                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">{{$data['cuti']->jmlcuti}}</span>
                             <ion-icon name="newspaper-outline" style="font-size: 1.6rem;"
                                       class="text-success"></ion-icon>
                             <br>
@@ -141,7 +141,7 @@
                     <div class="card">
                         <div class="card-body text-center" style="padding: 16px 12px !important;">
                             <span class="badge badge-danger"
-                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">0</span>
+                                  style="position: absolute; top: 3px; right: 20px; font-size: 0.6rem; ">{{$data['sakit']->jmlsakit}}</span>
                             <ion-icon name="medkit-outline" style="font-size: 1.6rem;" class="text-warning"></ion-icon>
                             <br>
                             <span style="font-size: 0.8rem">Sakit</span>

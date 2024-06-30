@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 30, 2024 at 06:34 PM
+-- Generation Time: Jun 30, 2024 at 08:18 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -90,6 +90,29 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pengajuan_cuti`
+--
+
+CREATE TABLE `pengajuan_cuti` (
+  `id` int NOT NULL,
+  `u_id` int NOT NULL,
+  `tgl_izin` date NOT NULL,
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '	i:izin s:sakit',
+  `keterangan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status_approved` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '0:Pending 1:Approve 2:Not Approve'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pengajuan_cuti`
+--
+
+INSERT INTO `pengajuan_cuti` (`id`, `u_id`, `tgl_izin`, `status`, `keterangan`, `status_approved`) VALUES
+(1, 1, '2024-07-02', 'i', 'asd', '0'),
+(2, 1, '2024-07-03', 'i', 'as', '1');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `personal_access_tokens`
 --
 
@@ -128,7 +151,7 @@ CREATE TABLE `presensi` (
 --
 
 INSERT INTO `presensi` (`id`, `u_id`, `tgl_presensi`, `jam_in`, `jam_out`, `foto_in`, `foto_out`, `location_in`, `location_out`) VALUES
-(20, 1, '2024-07-01', '09:49:00', '00:14:13', 'in-111-2024-07-01.png', 'out-111-2024-07-01.png', '-8.0392334,112.6196804', '-7.94624,112.6367232');
+(20, 1, '2024-07-01', '09:49:00', '17:14:13', 'in-111-2024-07-01.png', 'out-111-2024-07-01.png', '-8.0392334,112.6196804', '-7.94624,112.6367232');
 
 -- --------------------------------------------------------
 
@@ -182,6 +205,13 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
+-- Indexes for table `pengajuan_cuti`
+--
+ALTER TABLE `pengajuan_cuti`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `u_id` (`u_id`);
+
+--
 -- Indexes for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
@@ -217,6 +247,12 @@ ALTER TABLE `failed_jobs`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `pengajuan_cuti`
+--
+ALTER TABLE `pengajuan_cuti`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`

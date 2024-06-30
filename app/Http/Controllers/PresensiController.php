@@ -137,11 +137,40 @@ class PresensiController extends Controller
 
     public function cuti()
     {
-        return view('presensi.cuti');
+        $id         = Auth::user()->id;
+        $dataizin = DB::table('pengajuan_cuti')->where('u_id', $id)->orderBy('tgl_izin', 'asc')->get();
+        return view('presensi.cuti', compact('dataizin'));
     }
 
     public function create_cuti()
     {
+
         return view('presensi.create_cuti');
+    }
+
+    public function store_cuti(Request $request)
+    {
+        $id         = Auth::user()->id;
+        $tanggal    = $request->tanggal;
+        $status     = $request->status;
+        $keterangan = $request->keterangan;
+
+        $params = [
+            'u_id'              => $id,
+            'tgl_izin'          => $tanggal,
+            'keterangan'        => $keterangan,
+            'status'            => $status,
+            'status_approved'   => 0
+        ];
+
+        $action = DB::table('pengajuan_cuti')->insert($params);
+
+        if ($action){
+            return redirect('/presensi/cuti')->with(['success' => 'Data Berhasil Diajukan']);
+        } else {
+            return redirect('/presensi/cuti')->with(['error' => 'Terjadi kesalahan!']);
+        }
+
+//        echo $tanggal;
     }
 }

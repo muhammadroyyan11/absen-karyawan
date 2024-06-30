@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class PresensiController extends Controller
@@ -28,15 +30,23 @@ class PresensiController extends Controller
         $tgl_presensi = date('Y-m-d');
         $jam = date('H:i:s');
         $location = $request->lokasi;
+
+        $check_absen = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('u_id', $u_id)->count();
+
+        if ($check_absen > 0){
+            $ket = "out";
+        } else {
+            $ket = "in";
+        }
+
         $image = $request->image;
-        $folderPath = 'public/uploads/absensi/';
-        $formatName = $nik . '-' . $tgl_presensi;
+        $folderPath = "public/uploads/absensi/";
+        $formatName = $ket . '-' . $nik . '-' . $tgl_presensi;
         $image_parts = explode(";base64", $image);
         $image_base64 = base64_decode($image_parts[1]);
         $fileName = $formatName.".png";
         $file = $folderPath . $fileName;
 
-        $check_absen = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('u_id', $u_id)->count();
 
         if ($check_absen > 0){
             $params = [
@@ -58,6 +68,8 @@ class PresensiController extends Controller
             ];
 
             $action = DB::table('presensi')->insert($params);
+
+
             echo 'success|Terima Kasih, Selamat Bekerja|in';
         }
 
@@ -65,6 +77,61 @@ class PresensiController extends Controller
             Storage::put($file,$image_base64);
         }
 
-//        return json_encode($r);
+    }
+
+    public function editProfile()
+    {
+        return view('presensi.edit_profile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $id         = Auth::user()->id;
+        $nama       = $request->nama_lengkap;
+        $no_hp      = $request->no_hp;
+        $password      = Hash::make($request->password);
+
+        if (!empty($request->password)){
+            $params = [
+                'name'      => $nama,
+                'no_hp'     => $no_hp,
+                'password'  => $password
+            ];
+        } else {
+            $params = [
+                'name'      => $nama,
+                'no_hp'     => $no_hp
+            ];
+        }
+
+        $update = DB::table('users')->where('id', $id)->update($params);
+
+        if ($update){
+            return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
+        } else {
+            return Redirect::back()->with(['error' => 'Terjadi Keasalahan']);
+        }
+    }
+
+    public function history()
+    {
+        $namabulan = ["", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        return view('presensi.history', compact('namabulan'));
+    }
+
+    public function getHistory(Request $request)
+    {
+        $id         = Auth::user()->id;
+        $bulan      = $request->bulan;
+        $tahun      = $request->tahun;
+
+        $history    = DB::table('presensi')
+            ->whereRaw('MONTH(tgl_presensi)="'. $bulan .'"')
+            ->whereRaw('YEAR(tgl_presensi)="'. $tahun .'"')
+            ->where('u_id', $id)
+            ->orderBy('tgl_presensi', 'ASC')
+            ->get();
+
+        return view('presensi.getHistory', compact('history'));
     }
 }

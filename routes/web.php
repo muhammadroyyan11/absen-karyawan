@@ -28,6 +28,13 @@ Route::middleware(['auth:web'])->group(function (){
     Route::get('/presensi/create', [PresensiController::class, 'create']);
     Route::post('/presensi/store', [PresensiController::class, 'store']);
 
+    //edit profile
+    Route::get('/edit-profile', [PresensiController::class, 'editProfile']);
+    Route::post('/presensi/{id}/update-profile', [PresensiController::class, 'updateProfile']);
+
+    //history
+    Route::get('/history', [PresensiController::class, 'history']);
+    Route::post('/get-history', [PresensiController::class, 'getHistory']);
 });
 //Route::get('/dashboard', [DashboardController::class, 'index']);
 //Route::group(['prefix'=>'page','as'=>'page.'], function(){

@@ -134,4 +134,14 @@ class PresensiController extends Controller
 
         return view('presensi.getHistory', compact('history'));
     }
+
+    public function cuti()
+    {
+        return view('presensi.cuti');
+    }
+
+    public function create_cuti()
+    {
+        return view('presensi.create_cuti');
+    }
 }

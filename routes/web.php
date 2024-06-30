@@ -35,6 +35,10 @@ Route::middleware(['auth:web'])->group(function (){
     //history
     Route::get('/history', [PresensiController::class, 'history']);
     Route::post('/get-history', [PresensiController::class, 'getHistory']);
+
+    //cuti / izin
+    Route::get('/presensi/cuti', [PresensiController::class, 'cuti']);
+    Route::get('/presensi/cuti/create', [PresensiController::class, 'create_cuti']);
 });
 //Route::get('/dashboard', [DashboardController::class, 'index']);
 //Route::group(['prefix'=>'page','as'=>'page.'], function(){

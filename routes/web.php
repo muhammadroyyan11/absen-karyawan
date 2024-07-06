@@ -5,6 +5,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PresensiController;
 
+//admin
+use App\Http\Controllers\Admin\PanelAdminController;
+use App\Http\Controllers\Admin\RekapAdminController;
+use App\Http\Controllers\Admin\CutiAdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +25,24 @@ Route::middleware(['guest:web'])->group(function (){
     Route::get('/', [AuthController::class, 'index'])->name('login');
     Route::post('/prosesLogin', [AuthController::class, 'prosesLogin']);
 });
+
+Route::middleware(['guest:user'])->group(function (){
+    Route::get('/admin', function (){
+       return view('auth.loginAdmin');
+    })->name('login-admin');
+    Route::post('/prosesLoginAdmin', [AuthController::class, 'prosesLoginAdmin']);
+});
+
+
+Route::middleware(['auth:user'])->group(function (){
+    Route::get('/panel-admin', [PanelAdminController::class, 'index']);
+    Route::get('/logoutAdmin', [AuthController::class, 'logoutAdmin']);
+
+    Route::get('/rekap-absen', [RekapAdminController::class, 'index']);
+    Route::get('/request-cuti-list', [CutiAdminController::class, 'index']);
+    Route::get('/history-cuti-list', [CutiAdminController::class, 'history']);
+});
+
 
 Route::middleware(['auth:web'])->group(function (){
     Route::get('/logout', [AuthController::class, 'logout']);

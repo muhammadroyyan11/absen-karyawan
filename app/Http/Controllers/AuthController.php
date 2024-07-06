@@ -21,12 +21,36 @@ class AuthController extends Controller
         }
     }
 
+    public function prosesLoginAdmin(Request $request)
+    {
+        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            return redirect('/panel-admin');
+        } else {
+            return redirect('/')->with(['warning' => 'Username / Password Salah']);
+        }
+    }
+
     public function logout()
     {
-        if (Auth::guard('web')->check()){
-            Auth::guard('web')->logout();
-            return redirect('/');
-        } else {
+
+        dd(Auth::guard());
+//        if (Auth::guard('web')->check()){
+//            Auth::guard('web')->logout();
+//            return redirect('/');
+//        } elseif (Auth::guard('user')->check()){
+//            Auth::guard('user')->logout();
+//            return redirect('/panel');
+//        }else {
+//            return redirect('/');
+//        }
+    }
+
+    public function logoutAdmin()
+    {
+        if (Auth::guard('user')->check()){
+            Auth::guard('user')->logout();
+            return redirect('/panel');
+        }else {
             return redirect('/');
         }
     }

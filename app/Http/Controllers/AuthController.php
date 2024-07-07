@@ -32,17 +32,12 @@ class AuthController extends Controller
 
     public function logout()
     {
-
-        dd(Auth::guard());
-//        if (Auth::guard('web')->check()){
-//            Auth::guard('web')->logout();
-//            return redirect('/');
-//        } elseif (Auth::guard('user')->check()){
-//            Auth::guard('user')->logout();
-//            return redirect('/panel');
-//        }else {
-//            return redirect('/');
-//        }
+        if (Auth::guard('web')->check()){
+            Auth::guard('web')->logout();
+            return redirect('/');
+        } else {
+            return redirect('/');
+        }
     }
 
     public function logoutAdmin()

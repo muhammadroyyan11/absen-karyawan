@@ -20,6 +20,7 @@ class DashboardController extends Controller
             ->whereRaw('MONTH(tgl_presensi)="' . $month . '"')
             ->whereRaw('YEAR(tgl_presensi)="' . $year . '"')
             ->orderBy('tgl_presensi', 'asc')
+            ->groupBy('u_id')
             ->get();
 
         $hadir      = DB::table('presensi')
@@ -28,6 +29,7 @@ class DashboardController extends Controller
             ->whereRaw('MONTH(tgl_presensi)="' . $month . '"')
             ->whereRaw('YEAR(tgl_presensi)="' . $year . '"')
             ->orderBy('tgl_presensi', 'asc')
+            ->groupBy('u_id')
             ->first();
 
         $cuti      = DB::table('pengajuan_cuti')
@@ -37,6 +39,7 @@ class DashboardController extends Controller
             ->whereRaw('MONTH(tgl_izin)="' . $month . '"')
             ->whereRaw('YEAR(tgl_izin)="' . $year . '"')
             ->orderBy('tgl_izin', 'asc')
+            ->groupBy('u_id')
             ->first();
 
         $sakit      = DB::table('pengajuan_cuti')
@@ -46,6 +49,7 @@ class DashboardController extends Controller
             ->whereRaw('MONTH(tgl_izin)="' . $month . '"')
             ->whereRaw('YEAR(tgl_izin)="' . $year . '"')
             ->orderBy('tgl_izin', 'asc')
+            ->groupBy('u_id')
             ->first();
 
         $terlambat   = DB::table('presensi')
@@ -54,6 +58,7 @@ class DashboardController extends Controller
             ->whereRaw('MONTH(tgl_presensi)="' . $month . '"')
             ->whereRaw('YEAR(tgl_presensi)="' . $year . '"')
             ->orderBy('tgl_presensi', 'asc')
+            ->groupBy('u_id')
             ->get();
         $data = [
             'title'             => 'dashboard',

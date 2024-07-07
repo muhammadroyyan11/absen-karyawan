@@ -130,6 +130,7 @@ class PresensiController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="'. $tahun .'"')
             ->where('u_id', $id)
             ->orderBy('tgl_presensi', 'ASC')
+            ->groupBy('u_id')
             ->get();
 
         return view('presensi.getHistory', compact('history'));

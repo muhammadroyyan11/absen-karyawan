@@ -51,8 +51,8 @@ class DashboardController extends Controller
         $terlambat   = DB::table('presensi')
             ->where('u_id', $id_user)
             ->whereRaw('TIME(jam_in) > ?', ['08:00:00'])
-            ->whereRaw('MONTH(tgl_izin) = ?', [$month])
-            ->whereRaw('YEAR(tgl_izin) = ?', [$year])
+            ->whereRaw('MONTH(tgl_presensi) = ?', [$month])
+            ->whereRaw('YEAR(tgl_presensi) = ?', [$year])
             ->orderBy('tgl_presensi', 'asc')
             ->get();
         $data = [

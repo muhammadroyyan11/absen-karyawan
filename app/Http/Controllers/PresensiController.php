@@ -126,8 +126,8 @@ class PresensiController extends Controller
         $tahun      = $request->tahun;
 
         $history    = DB::table('presensi')
-            ->whereRaw('MONTH(tgl_presensi)="'. $bulan .'"')
-            ->whereRaw('YEAR(tgl_presensi)="'. $tahun .'"')
+            ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
+            ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
             ->where('u_id', $id)
             ->orderBy('tgl_presensi', 'ASC')
             ->get();

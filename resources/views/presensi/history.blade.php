@@ -68,37 +68,37 @@
     <div class="row" style="margin-top: 70px">
         <div class="col">
             <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <select name="bulan" id="bulan" class="form-control">
-                            <option value="">-- Pilih Bulan --</option>
-                            @for($i=1; $i<=12; $i++)
-                                <option
-                                    value="{{ $i }}" {{ date('m') == $i ? 'selected' : '' }}>{{ $namabulan[$i] }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <select name="tahun" id="tahun" class="form-control">
-                            <option value="">-- Pilih Tahun --</option>
-                            @php
-                                $tahunmulai = 2023;
-                                $tahunskrg  = date('Y');
-                            @endphp
-                            @for($tahun=$tahunmulai; $tahun <= $tahunskrg; $tahun++)
-                                <option
-                                    value="{{ $tahun }}" {{ date('Y') == $tahun ? 'selected' : '' }}>{{ $tahun }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-block" id="cari">Search</button>
-                    </div>
-                </div>
+{{--                <div class="col-12">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <select name="bulan" id="bulan" class="form-control">--}}
+{{--                            <option value="">-- Pilih Bulan --</option>--}}
+{{--                            @for($i=1; $i<=12; $i++)--}}
+{{--                                <option--}}
+{{--                                    value="{{ $i }}" {{ date('m') == $i ? 'selected' : '' }}>{{ $namabulan[$i] }}</option>--}}
+{{--                            @endfor--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="col-12">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <select name="tahun" id="tahun" class="form-control">--}}
+{{--                            <option value="">-- Pilih Tahun --</option>--}}
+{{--                            @php--}}
+{{--                                $tahunmulai = 2023;--}}
+{{--                                $tahunskrg  = date('Y');--}}
+{{--                            @endphp--}}
+{{--                            @for($tahun=$tahunmulai; $tahun <= $tahunskrg; $tahun++)--}}
+{{--                                <option--}}
+{{--                                    value="{{ $tahun }}" {{ date('Y') == $tahun ? 'selected' : '' }}>{{ $tahun }}</option>--}}
+{{--                            @endfor--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="col-12">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <button class="btn btn-primary btn-block" id="cari">Search</button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
         </div>
     </div>
@@ -115,6 +115,25 @@
                 </div>
                 <div class="card-body p-2">
                     <div id="calendar"></div>
+
+                    <!-- Hint Keterangan -->
+                    <div class="mt-3">
+                        <h6>Keterangan:</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-1">
+                                <span class="badge bg-success d-inline-block me-2" style="width: 20px; height: 20px;">&nbsp;</span>
+                                Jam Masuk
+                            </li>
+                            <li class="mb-1">
+                                <span class="badge bg-danger d-inline-block me-2" style="width: 20px; height: 20px;">&nbsp;</span>
+                                Jam Keluar
+                            </li>
+                            <li class="mb-1">
+                                <span class="badge bg-warning d-inline-block me-2" style="width: 20px; height: 20px;">&nbsp;</span>
+                                Tidak Masuk
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

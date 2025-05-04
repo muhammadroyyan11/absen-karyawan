@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserSession;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -32,12 +35,20 @@ class AuthController extends Controller
 
     public function logout()
     {
-        if (Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
+            $userId = Auth::guard('web')->id();
+
+            UserSession::where('user_id', $userId)
+                ->where('session_id', Session::getId())
+                ->delete();
+
             Auth::guard('web')->logout();
-            return redirect('/');
-        } else {
+            Session::invalidate();
+
             return redirect('/');
         }
+
+        return redirect('/');
     }
 
     public function logoutAdmin()

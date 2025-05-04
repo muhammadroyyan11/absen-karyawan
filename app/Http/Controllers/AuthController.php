@@ -35,17 +35,11 @@ class AuthController extends Controller
 
     public function logout()
     {
-        if (Auth::guard('web')->check()) {
-            $userId = Auth::guard('web')->id();
+        $user = Auth::user();
 
-            UserSession::where('user_id', $userId)
-                ->where('session_id', Session::getId())
-                ->delete();
-
-            Auth::guard('web')->logout();
-            Session::invalidate();
-
-            return redirect('/');
+        if ($user) {
+            \App\Models\UserSession::where('user_id', $user->id)->delete(); // hapus sesi
+            Auth::logout();
         }
 
         return redirect('/');

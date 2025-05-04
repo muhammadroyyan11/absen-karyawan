@@ -102,7 +102,7 @@
     <!-- Base Js File -->
     <script src="{{asset('assets/js/base.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     @if(session('device_conflict'))
         <script>
             Swal.fire({

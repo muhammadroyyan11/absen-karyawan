@@ -101,6 +101,18 @@
     <script src="{{asset('assets/js/plugins/jquery-circle-progress/circle-progress.min.js')}}"></script>
     <!-- Base Js File -->
     <script src="{{asset('assets/js/base.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    @if(session('device_conflict'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Perhatian',
+                text: '{{ session("device_conflict") }}',
+                confirmButtonColor: '#3085d6',
+            });
+        </script>
+    @endif
 
 
 </body>

@@ -135,6 +135,64 @@ class PresensiController extends Controller
         return view('presensi.getHistory', compact('history'));
     }
 
+    public function getHistoryCalendar(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $userId = auth()->user()->id;
+
+        $data = DB::table('presensi')
+            ->whereMonth('tgl_presensi', $bulan)
+            ->whereYear('tgl_presensi', $tahun)
+            ->where('u_id', $userId)
+            ->get();
+
+        $events = [];
+
+        foreach ($data as $item) {
+            // Event jam masuk
+            $events[] = [
+                'title' => 'In: ' . date('H:i', strtotime($item->jam_in)),
+                'start' => $item->tgl_presensi,
+                'color' => 'green',
+            ];
+
+            // Event jam keluar (jika ada)
+            if ($item->jam_out) {
+                $events[] = [
+                    'title' => 'Out: ' . date('H:i', strtotime($item->jam_out)),
+                    'start' => $item->tgl_presensi,
+                    'color' => 'red',
+                ];
+            }
+        }
+
+        return response()->json($events);
+    }
+
+    public function getPresensiDetail(Request $request)
+    {
+        $tanggal = $request->date;  // Tanggal yang dikirimkan dari AJAX
+
+        // Ambil data presensi berdasarkan tanggal
+        $presensi = DB::table('presensi')
+            ->where('tgl_presensi', $tanggal)
+            ->get();
+
+        $output = '';
+
+        foreach ($presensi as $item) {
+            $output .= "<p><strong>Jam Masuk:</strong> " . date('H:i', strtotime($item->jam_in)) . "</p>";
+            $output .= "<p><strong>Jam Keluar:</strong> " . ($item->jam_out ? date('H:i', strtotime($item->jam_out)) : '-') . "</p>";
+            $output .= "<p><strong>Foto Masuk:</strong> <img src='" . asset('storage/' . $item->foto_in) . "' width='100'></p>";
+            $output .= "<p><strong>Foto Keluar:</strong> <img src='" . ($item->foto_out ? asset('storage/' . $item->foto_out) : '') . "' width='100'></p>";
+            $output .= "<p><strong>Lokasi Masuk:</strong> " . ($item->location_in ?? '-') . "</p>";
+            $output .= "<p><strong>Lokasi Keluar:</strong> " . ($item->location_out ?? '-') . "</p>";
+        }
+
+        return response()->json($output);
+    }
+
     public function cuti()
     {
         $id         = Auth::user()->id;

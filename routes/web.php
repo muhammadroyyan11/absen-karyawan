@@ -58,6 +58,8 @@ Route::middleware(['auth:web'])->group(function (){
     //history
     Route::get('/history', [PresensiController::class, 'history']);
     Route::post('/get-history', [PresensiController::class, 'getHistory']);
+    Route::post('/get-history-calendar', [PresensiController::class, 'getHistoryCalendar']);
+    Route::post('/get-presensi-detail', [PresensiController::class, 'getPresensiDetail']);
 
     //cuti / izin
     Route::get('/presensi/cuti', [PresensiController::class, 'cuti']);

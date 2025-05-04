@@ -135,6 +135,89 @@ class PresensiController extends Controller
         return view('presensi.getHistory', compact('history'));
     }
 
+    public function getHistoryCalendar(Request $request)
+    {
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+        $userId = auth()->user()->id;
+
+        $data = DB::table('presensi')
+            ->whereMonth('tgl_presensi', $bulan)
+            ->whereYear('tgl_presensi', $tahun)
+            ->where('u_id', $userId)
+            ->get();
+
+        $events = [];
+
+        foreach ($data as $item) {
+            // Event jam masuk
+            $events[] = [
+                'title' => 'In: ' . date('H:i', strtotime($item->jam_in)),
+                'start' => $item->tgl_presensi,
+                'color' => 'green',
+            ];
+
+            // Event jam keluar (jika ada)
+            if ($item->jam_out) {
+                $events[] = [
+                    'title' => 'Out: ' . date('H:i', strtotime($item->jam_out)),
+                    'start' => $item->tgl_presensi,
+                    'color' => 'red',
+                ];
+            }
+        }
+
+        return response()->json($events);
+    }
+
+    public function getPresensiDetail(Request $request)
+    {
+        $tanggal = $request->date;  // Tanggal yang dikirimkan dari AJAX
+
+        // Ambil data presensi berdasarkan tanggal
+        $presensi = DB::table('presensi')
+            ->where('tgl_presensi', $tanggal)
+            ->get();
+
+        $output = '';
+        $presensiData = [];
+
+        foreach ($presensi as $item) {
+            $tanggal = date('d F Y', strtotime($item->tgl_presensi));
+            $hari = date('l', strtotime($item->tgl_presensi));
+
+            $output .= '<div class="presensi-card">';
+
+            $output .= '<h4>' . $hari . ', ' . $tanggal . '</h4>';
+
+            // Tabel informasi presensi
+            $output .= '<table class="table table-borderless presensi-table">';
+            $output .= '<tr><th>Jam Masuk</th><td>' . date('H:i', strtotime($item->jam_in)) . '</td></tr>';
+            $output .= '<tr><th>Jam Keluar</th><td>' . ($item->jam_out ? date('H:i', strtotime($item->jam_out)) : '-') . '</td></tr>';
+            $output .= '<tr><th>Foto Masuk</th><td><img class="foto-presensi" src="' . Storage::url('uploads/absensi/' . $item->foto_in) . '" width="100" data-bs-toggle="modal" data-bs-target="#modalFoto"></td></tr>';
+            $output .= '<tr><th>Foto Keluar</th><td>' . ($item->foto_out ? '<img class="foto-presensi" src="' . Storage::url('uploads/absensi/' . $item->foto_out) . '" width="100" data-bs-toggle="modal" data-bs-target="#modalFoto">' : '-') . '</td></tr>';
+            $output .= '</table>';
+
+            $output .= '<div class="maps-container">';
+            $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $item->id . '" class="map" style="height: 200px;"></div>';
+            $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $item->id . '" class="map" style="height: 200px;"></div>';
+            $output .= '</div>';
+
+            $output .= '</div>'; // End of presensi-card
+
+            $presensiData[] = [
+                'id' => $item->id,
+                'location_in' => $item->location_in,
+                'location_out' => $item->location_out
+            ];
+        }
+
+        return response()->json([
+            'html' => $output,
+            'presensi' => $presensiData
+        ]);
+    }
+
     public function cuti()
     {
         $id         = Auth::user()->id;

@@ -180,17 +180,42 @@ class PresensiController extends Controller
             ->get();
 
         $output = '';
+        $presensiData = [];
 
         foreach ($presensi as $item) {
-            $output .= "<p><strong>Jam Masuk:</strong> " . date('H:i', strtotime($item->jam_in)) . "</p>";
-            $output .= "<p><strong>Jam Keluar:</strong> " . ($item->jam_out ? date('H:i', strtotime($item->jam_out)) : '-') . "</p>";
-            $output .= "<p><strong>Foto Masuk:</strong> <img src='" . asset('storage/' . $item->foto_in) . "' width='100'></p>";
-            $output .= "<p><strong>Foto Keluar:</strong> <img src='" . ($item->foto_out ? asset('storage/' . $item->foto_out) : '') . "' width='100'></p>";
-            $output .= "<p><strong>Lokasi Masuk:</strong> " . ($item->location_in ?? '-') . "</p>";
-            $output .= "<p><strong>Lokasi Keluar:</strong> " . ($item->location_out ?? '-') . "</p>";
+            $tanggal = date('d F Y', strtotime($item->tgl_presensi));
+            $hari = date('l', strtotime($item->tgl_presensi));
+
+            $output .= '<div class="presensi-card">';
+
+            $output .= '<h4>' . $hari . ', ' . $tanggal . '</h4>';
+
+            // Tabel informasi presensi
+            $output .= '<table class="table table-borderless presensi-table">';
+            $output .= '<tr><th>Jam Masuk</th><td>' . date('H:i', strtotime($item->jam_in)) . '</td></tr>';
+            $output .= '<tr><th>Jam Keluar</th><td>' . ($item->jam_out ? date('H:i', strtotime($item->jam_out)) : '-') . '</td></tr>';
+            $output .= '<tr><th>Foto Masuk</th><td><img class="foto-presensi" src="' . Storage::url('uploads/absensi/' . $item->foto_in) . '" width="100" data-bs-toggle="modal" data-bs-target="#modalFoto"></td></tr>';
+            $output .= '<tr><th>Foto Keluar</th><td>' . ($item->foto_out ? '<img class="foto-presensi" src="' . Storage::url('uploads/absensi/' . $item->foto_out) . '" width="100" data-bs-toggle="modal" data-bs-target="#modalFoto">' : '-') . '</td></tr>';
+            $output .= '</table>';
+
+            $output .= '<div class="maps-container">';
+            $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $item->id . '" class="map" style="height: 200px;"></div>';
+            $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $item->id . '" class="map" style="height: 200px;"></div>';
+            $output .= '</div>';
+
+            $output .= '</div>'; // End of presensi-card
+
+            $presensiData[] = [
+                'id' => $item->id,
+                'location_in' => $item->location_in,
+                'location_out' => $item->location_out
+            ];
         }
 
-        return response()->json($output);
+        return response()->json([
+            'html' => $output,
+            'presensi' => $presensiData
+        ]);
     }
 
     public function cuti()

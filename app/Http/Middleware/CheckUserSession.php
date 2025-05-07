@@ -6,6 +6,7 @@ use App\Models\UserSession;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Jenssegers\Agent\Agent;
 
 class CheckUserSession
 {
@@ -20,6 +21,9 @@ class CheckUserSession
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
+        $agent = new Agent();
+        $deviceInfo = $request->header('User-Agent');
+        $deviceName = $agent->device();
 
         if ($user) {
             $deviceId = hash('sha256', $request->userAgent() . $request->ip());
@@ -43,7 +47,7 @@ class CheckUserSession
             // Simpan atau update sesi
             \App\Models\UserSession::updateOrCreate(
                 ['user_id' => $user->id],
-                ['device_id' => $deviceId, 'last_login_at' => now()]
+                ['device_id' => $deviceId, 'device_info' => $deviceInfo,'device_type' => $deviceName,'last_login_at' => now()]
             );
         }
 

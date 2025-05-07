@@ -9,6 +9,7 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\Admin\PanelAdminController;
 use App\Http\Controllers\Admin\RekapAdminController;
 use App\Http\Controllers\Admin\CutiAdminController;
+use App\Http\Controllers\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,11 @@ Route::middleware(['auth', 'check.session'])->group(function () {
     Route::post('/get-history-calendar', [PresensiController::class, 'getHistoryCalendar']);
     Route::post('/get-presensi-detail', [PresensiController::class, 'getPresensiDetail']);
 
+    //jadwal
+    Route::get('/jadwal', [JadwalController::class, 'index']);
+    Route::post('/get-jadwal', [JadwalController::class, 'getHistory']);
+    Route::post('/get-jadwal-calendar', [JadwalController::class, 'getJadwalCalendar']);
+
     //cuti / izin
     Route::get('/presensi/cuti', [PresensiController::class, 'cuti']);
     Route::get('/presensi/cuti/create', [PresensiController::class, 'create_cuti']);
@@ -59,6 +65,11 @@ Route::middleware(['guest:user'])->group(function (){
 Route::middleware(['auth:user'])->group(function (){
     Route::get('/panel-admin', [PanelAdminController::class, 'index']);
     Route::get('/logoutAdmin', [AuthController::class, 'logoutAdmin']);
+
+    //input jadwal
+    Route::get('/jadwal-input', [\App\Http\Controllers\admin\JadwalInputController::class, 'index']);
+    Route::get('/get-data-jadwal', [\App\Http\Controllers\admin\JadwalInputController::class, 'getDatatables']);
+
 
     Route::get('/rekap-absen', [RekapAdminController::class, 'index']);
     Route::get('/request-cuti-list', [CutiAdminController::class, 'index']);

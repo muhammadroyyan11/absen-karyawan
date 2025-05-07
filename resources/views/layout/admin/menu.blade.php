@@ -21,6 +21,9 @@
             <li class=" {{ request()->is('rekap-absen') ? 'active' : ''}}"><a href="/rekap-absen"><i
                         class="fa fa-dashboard"></i> <span>Rekap Absensi</span></a></li>
 
+            <li class=" {{ request()->is('jadwal-input') ? 'active' : ''}}"><a href="/jadwal-input"><i
+                        class="fa fa-dashboard"></i> <span>Rekap Absensi</span></a></li>
+
             <li class="treeview {{ request()->is('request-cuti-list') ? 'active' : ''}}">
                 <a href="#">
                     <i class="fa fa-envelope"></i> <span>Cuti</span>

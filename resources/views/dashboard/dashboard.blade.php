@@ -48,12 +48,12 @@
                     </div>
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="orange" style="font-size: 40px;">
-                                <ion-icon name="location"></ion-icon>
+                            <a href="/jadwal" class="orange" style="font-size: 40px;">
+                                <ion-icon name="calendar"></ion-icon>
                             </a>
                         </div>
                         <div class="menu-name">
-                            Lokasi
+                            Jadwal Kerja
                         </div>
                     </div>
                 </div>

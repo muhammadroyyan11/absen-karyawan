@@ -61,6 +61,8 @@ class GroamingStaffController extends Controller
             ->orderBy('month')
             ->pluck('month');
 
+//        dd($months);
+
         return view('admin.groaming.drive_grid', [
             'folders' => $months,
             'level' => 'month',
@@ -101,8 +103,6 @@ class GroamingStaffController extends Controller
             ->groupBy('user_name')
             ->orderBy('user_name')
             ->get();
-
-//        dd($staffs);
 
         return view('admin.groaming.drive_grid_user', [
             'folders' => $staffs,

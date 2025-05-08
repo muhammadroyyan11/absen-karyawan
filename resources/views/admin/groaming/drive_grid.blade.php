@@ -25,8 +25,13 @@
                             <div class="box-body text-center">
                                 <i class="fa fa-folder" style="font-size: 50px; color: #757575;"></i>
                                 <h5 class="card-title mt-2">
-                                    {{ is_numeric($folder) && strlen($folder) === 1 ? str_pad($folder, 2, '0', STR_PAD_LEFT) : $folder }}
-{{--                                    {{ htmlspecialchars($folder->user_name) }}--}}
+                                    @if($level == 'month')
+                                        {{ \Carbon\Carbon::create()->month((int) $folder)->translatedFormat('F') }}
+                                    @elseif(is_object($folder) && isset($folder->user_name))
+                                        {{ $folder->user_name }}
+                                    @else
+                                        {{ is_numeric($folder) && strlen($folder) === 1 ? str_pad($folder, 2, '0', STR_PAD_LEFT) : $folder }}
+                                    @endif
                                 </h5>
 
                                 @php

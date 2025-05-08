@@ -6,9 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PresensiController;
 
 //admin
-use App\Http\Controllers\Admin\PanelAdminController;
-use App\Http\Controllers\Admin\RekapAdminController;
-use App\Http\Controllers\Admin\CutiAdminController;
+use App\Http\Controllers\admin\PanelAdminController;
+use App\Http\Controllers\admin\RekapAdminController;
+use App\Http\Controllers\admin\CutiAdminController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\admin\GroamingStaffController;
 use App\Http\Controllers\admin\JadwalInputController;

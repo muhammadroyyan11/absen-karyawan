@@ -16,6 +16,8 @@
     <div class="row" style="margin-top: 60px">
         <div class="col">
             <input type="hidden" id="lokasi">
+            <label for="cameraSelect">Pilih Kamera:</label>
+            <select id="cameraSelect" class="form-control mb-2"></select>
             <div class="webcam-capture"></div>
         </div>
     </div>
@@ -45,23 +47,58 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Set konfigurasi awal Webcam dengan kamera belakang (mobile-friendly)
-        Webcam.set({
-            width: 640,
-            height: 480,
-            image_format: 'jpeg',
-            jpeg_quality: 80,
-            constraints: {
-                facingMode: "environment" // Gunakan kamera belakang jika tersedia
+        let currentCamera = null;
+
+        // Fungsi untuk memulai webcam dengan deviceId tertentu
+        function startCamera(deviceId = null) {
+            Webcam.reset();
+
+            const config = {
+                width: 640,
+                height: 480,
+                image_format: 'jpeg',
+                jpeg_quality: 80,
+            };
+
+            if (deviceId) {
+                config.constraints = {
+                    deviceId: { exact: deviceId }
+                };
+            } else {
+                config.constraints = {
+                    facingMode: "environment" // default kamera belakang
+                };
+            }
+
+            Webcam.set(config);
+            Webcam.attach('.webcam-capture');
+        }
+
+        // Dapatkan dan tampilkan daftar kamera
+        Webcam.getCameraList(function(cameras) {
+            const cameraSelect = document.getElementById('cameraSelect');
+            cameraSelect.innerHTML = '';
+
+            cameras.forEach((camera, index) => {
+                const option = document.createElement('option');
+                option.value = camera;
+                option.text = camera;
+                cameraSelect.appendChild(option);
+            });
+
+            // Gunakan kamera pertama sebagai default
+            if (cameras.length > 0) {
+                currentCamera = cameras[0];
+                startCamera(currentCamera);
             }
         });
 
-        Webcam.on('error', function(err) {
-            console.error("Webcam error:", err);
+        // Ganti kamera saat user memilih
+        document.getElementById('cameraSelect').addEventListener('change', function () {
+            const selected = this.value;
+            currentCamera = selected;
+            startCamera(currentCamera);
         });
-
-        // Attach kamera ke div
-        Webcam.attach('.webcam-capture');
 
         // Lokasi via Geolocation
         var lokasi = document.getElementById('lokasi');
@@ -92,7 +129,7 @@
             console.error("Lokasi tidak ditemukan atau ditolak.");
         }
 
-        // Ambil dan kirim foto serta lokasi saat tombol diklik
+        // Tombol absen
         $('#absen').click(function (e){
             Webcam.snap(function (uri){
                 var lokasi = $('#lokasi').val();

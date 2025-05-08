@@ -10,14 +10,40 @@
         <div class="pageTitle">Form Absen</div>
         <div class="right"></div>
     </div>
+
+    <style>
+        .webcam-wrapper {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+        }
+
+        .webcam-capture {
+            width: 100%;
+            height: auto;
+        }
+
+        #switchCamera {
+            opacity: 0.9;
+            backdrop-filter: blur(4px);
+        }
+    </style>
 @endsection
 
 @section('content')
     <div class="row" style="margin-top: 60px">
         <div class="col">
             <input type="hidden" id="lokasi">
-            <button id="switchCamera" class="btn btn-outline-secondary mb-2">Ganti Kamera</button>
-            <div class="webcam-capture"></div>
+{{--            <button id="switchCamera" class="btn btn-outline-secondary mb-2">Ganti Kamera</button>--}}
+{{--            <div class="webcam-capture"></div>--}}
+            <div class="webcam-wrapper position-relative">
+                <div class="webcam-capture"></div>
+                <button id="switchCamera" class="btn btn-sm btn-light position-absolute d-flex align-items-center gap-1"
+                        style="top: 10px; right: 10px; z-index: 10; opacity: 0.9; backdrop-filter: blur(4px);">
+                    <ion-icon name="camera-reverse-outline"></ion-icon>
+                    Ganti
+                </button>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -45,6 +71,8 @@
 @push('custom')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
         let useFrontCamera = false;
 

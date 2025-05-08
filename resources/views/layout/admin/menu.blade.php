@@ -22,7 +22,11 @@
                         class="fa fa-dashboard"></i> <span>Rekap Absensi</span></a></li>
 
             <li class=" {{ request()->is('jadwal-input') ? 'active' : ''}}"><a href="/jadwal-input"><i
-                        class="fa fa-dashboard"></i> <span>Rekap Absensi</span></a></li>
+                        class="fa fa-dashboard"></i> <span>Input Jadwal</span></a></li>
+
+            <li class=" {{ request()->is('admin/presensi-drive') ? 'active' : ''}}"><a href="/admin/presensi-drive"><i
+                        class="fa fa-dashboard"></i> <span>Rekap Groaming</span></a></li>
+
 
             <li class="treeview {{ request()->is('request-cuti-list') ? 'active' : ''}}">
                 <a href="#">

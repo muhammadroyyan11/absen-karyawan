@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\PanelAdminController;
 use App\Http\Controllers\Admin\RekapAdminController;
 use App\Http\Controllers\Admin\CutiAdminController;
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\admin\GroamingStaffController;
+use App\Http\Controllers\admin\JadwalInputController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +72,19 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/jadwal-input', [\App\Http\Controllers\admin\JadwalInputController::class, 'index']);
     Route::get('/get-data-jadwal', [\App\Http\Controllers\admin\JadwalInputController::class, 'getDatatables']);
 
+    //foto groaming drive
+    Route::get('/rekap-groaming', [GroamingStaffController::class, 'index']);
+    Route::get('/groaming/folder/{year}', [GroamingStaffController::class, 'showMonths'])->name('groaming.folder');
+    Route::get('/groaming/folder/{year}/{month}', [GroamingStaffController::class, 'showDates']);
+    Route::get('/groaming/folder/{year}/{month}/{day}', [GroamingStaffController::class, 'showPhotos']);
+
+    Route::prefix('admin/presensi-drive')->group(function () {
+        Route::get('/', [GroamingStaffController::class, 'driveYears'])->name('drive.years');
+        Route::get('/{year}', [GroamingStaffController::class, 'driveMonths'])->name('drive.months');
+        Route::get('/{year}/{month}', [GroamingStaffController::class, 'driveDates'])->name('drive.dates');
+        Route::get('/{year}/{month}/{day}', [GroamingStaffController::class, 'driveStaff'])->name('drive.staff');
+        Route::get('/{year}/{month}/{day}/{user}', [GroamingStaffController::class, 'drivePhotos'])->name('drive.photos');
+    });
 
     Route::get('/rekap-absen', [RekapAdminController::class, 'index']);
     Route::get('/request-cuti-list', [CutiAdminController::class, 'index']);

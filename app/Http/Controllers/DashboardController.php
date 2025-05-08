@@ -22,12 +22,11 @@ class DashboardController extends Controller
             ->orderBy('tgl_presensi', 'asc')
             ->get();
 
-        $hadir      = DB::table('presensi')
+        $hadir = DB::table('presensi')
             ->selectRaw('COUNT(u_id) as jmlhadir, SUM(IF(jam_in > "08:00",1,0)) as jmltelat')
             ->where('u_id', $id_user)
             ->whereRaw('MONTH(tgl_presensi) = ?', [$month])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$year])
-            ->orderBy('tgl_presensi', 'asc')
             ->first();
 
         $cuti      = DB::table('pengajuan_cuti')
@@ -36,7 +35,6 @@ class DashboardController extends Controller
             ->where('status', 'i')
             ->whereRaw('MONTH(tgl_izin) = ?', [$month])
             ->whereRaw('YEAR(tgl_izin) = ?', [$year])
-            ->orderBy('tgl_izin', 'asc')
             ->first();
 
         $sakit      = DB::table('pengajuan_cuti')
@@ -45,7 +43,6 @@ class DashboardController extends Controller
             ->where('status', 's')
             ->whereRaw('MONTH(tgl_izin) = ?', [$month])
             ->whereRaw('YEAR(tgl_izin) = ?', [$year])
-            ->orderBy('tgl_izin', 'asc')
             ->first();
 
         $terlambat   = DB::table('presensi')
@@ -53,7 +50,6 @@ class DashboardController extends Controller
             ->whereRaw('TIME(jam_in) > ?', ['08:00:00'])
             ->whereRaw('MONTH(tgl_presensi) = ?', [$month])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$year])
-            ->orderBy('tgl_presensi', 'asc')
             ->get();
         $data = [
             'title'             => 'dashboard',

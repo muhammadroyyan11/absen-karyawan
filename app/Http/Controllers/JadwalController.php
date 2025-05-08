@@ -19,37 +19,34 @@ class JadwalController extends Controller
 
     public function getJadwalCalendar(Request $request)
     {
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        // Mendapatkan user yang sedang login
         $userId = auth()->user()->id;
 
+        // Ambil bulan dan tahun dari request, jika tidak ada gunakan bulan dan tahun sekarang
+        $bulan = $request->bulan ?? now()->month;
+        $tahun = $request->tahun ?? now()->year;
+
         // Ambil data jadwal berdasarkan bulan, tahun, dan user_id yang sedang login
-        $data = DB::table('jadwals')
-            ->whereMonth('date', $bulan)
-            ->whereYear('date', $tahun)
-            ->where('user_id', $userId)
+        $schedules = jadwals::where('user_id', $userId) // Filter berdasarkan user_id yang login
             ->get();
 
-        $events = [];
-
-        foreach ($data as $item) {
-            // Ambil informasi shift
-            $shiftName = $item->shift->name_shift ?? 'N/A';
-            $description = $item->shift->description ?? '';
+        $events = $schedules->map(function ($schedule) {
+            $shiftName = $schedule->shift->name_shift ?? 'N/A';
+            $description = $schedule->shift->description ?? '';
 
             // Jika nama shift adalah "Libur", warnai merah
             $color = stripos($shiftName, 'Libur') !== false ? '#ff0000' : '#3788d8';
 
-            // Event untuk jadwal kerja
-            $events[] = [
+            return [
                 'title' => $shiftName,
-                'start' => $item->date,
-                'end' => $item->date,
+                'start' => $schedule->date->toDateString(), // Format start date
+                'end' => $schedule->date->toDateString(),
                 'description' => $description,
                 'color' => $color,
             ];
-        }
+        });
 
-        return response()->json($events);
+
+        return response()->json($events); // Mengirimkan data ke frontend dalam format JSON
     }
 }

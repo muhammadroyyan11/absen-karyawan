@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\jadwals;
+use App\Models\Jadwals;
 use Illuminate\Http\Request;
 
 class JadwalController extends Controller

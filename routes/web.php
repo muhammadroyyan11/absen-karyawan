@@ -12,6 +12,7 @@ use App\Http\Controllers\admin\CutiAdminController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\admin\GroamingStaffController;
 use App\Http\Controllers\admin\JadwalInputController;
+use App\Http\Controllers\admin\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,7 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/groaming/folder/{year}/{month}', [GroamingStaffController::class, 'showDates']);
     Route::get('/groaming/folder/{year}/{month}/{day}', [GroamingStaffController::class, 'showPhotos']);
 
+    // groaming recap
     Route::prefix('admin/presensi-drive')->group(function () {
         Route::get('/', [GroamingStaffController::class, 'driveYears'])->name('drive.years');
         Route::get('/{year}', [GroamingStaffController::class, 'driveMonths'])->name('drive.months');
@@ -85,6 +87,14 @@ Route::middleware(['auth:user'])->group(function (){
         Route::get('/{year}/{month}/{day}', [GroamingStaffController::class, 'driveStaff'])->name('drive.staff');
         Route::get('/{year}/{month}/{day}/{user}', [GroamingStaffController::class, 'drivePhotos'])->name('drive.photos');
     });
+
+    // department route
+    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
+    Route::get('/departments/data', [DepartmentController::class, 'getDatatables'])->name('departments.data');
+    Route::post('/departments/store', [DepartmentController::class, 'store'])->name('departments.store');
+    Route::get('/departments/{id}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+    Route::post('/departments/{id}/update', [DepartmentController::class, 'update'])->name('departments.update');
+    Route::delete('/departments/{id}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
     Route::get('/rekap-absen', [RekapAdminController::class, 'index']);
     Route::get('/request-cuti-list', [CutiAdminController::class, 'index']);

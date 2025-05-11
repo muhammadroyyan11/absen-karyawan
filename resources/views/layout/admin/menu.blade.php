@@ -36,14 +36,21 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ request()->is('request-cuti-list') ? 'active' : ''}}"><a href="/request-cuti-list"><i class="fa fa-circle-o"></i> Permohonan Cuti</a></li>
+                    <li class="{{ request()->is('request-cuti-list') ? 'active' : ''}}"><a href="/request-cuti-list"><i
+                                class="fa fa-circle-o"></i> Permohonan Cuti</a></li>
 
-                    <li class="{{ request()->is('history-cuti-list') ? 'active' : ''}}"><a href="/history-cuti-list"><i class="fa fa-circle-o"></i> History Cuti</a></li>
+                    <li class="{{ request()->is('history-cuti-list') ? 'active' : ''}}"><a href="/history-cuti-list"><i
+                                class="fa fa-circle-o"></i> History Cuti</a></li>
                 </ul>
             </li>
             <li class="header">MASTER DATA</li>
+            <li class="{{ request()->is('departments') ? 'active' : '' }}">
+                <a href="{{ route('departments.index') }}">
+                    <i class="fa fa-users"></i> <span>Data Divisi</span>
+                </a>
+            </li>
             <li class=" {{ request()->is('data-users') ? 'active' : ''}}"><a href="/data-users"><i
-                        class="fa fa-users"></i> <span>Data Karyawan</span></a></li>
+                        class="fa fa-user"></i> <span>Data Karyawan</span></a></li>
         </ul>
     </section>
     <!-- /.sidebar -->

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class PresensiController extends Controller
 {
@@ -218,11 +219,29 @@ class PresensiController extends Controller
         ]);
     }
 
-    public function cuti()
+    public function cuti(User $user)
     {
         $id         = Auth::user()->id;
         $dataizin = DB::table('pengajuan_cuti')->where('u_id', $id)->orderBy('tgl_izin', 'asc')->get();
-        return view('presensi.cuti', compact('dataizin'));
+        $leaveQuota = $user->getLeaveQuota();
+
+
+        return view('presensi.cuti', compact('dataizin', 'leaveQuota'));
+    }
+
+    public function checkLeaveEligibility(User $user)
+    {
+        $leaveQuota = $user->getLeaveQuota();
+
+        $leaveTaken = Leave::where('user_id', $user->id)
+            ->whereBetween('leave_start', [now()->subMonths(6), now()])
+            ->sum('days_taken');
+
+        if ($leaveTaken >= $leaveQuota) {
+            return response()->json(['message' => 'Leave quota exceeded.']);
+        }
+
+        return response()->json(['message' => 'You are eligible for leave.']);
     }
 
     public function create_cuti()

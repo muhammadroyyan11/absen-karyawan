@@ -9,14 +9,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
-class DepartmentController extends Controller
+class CutiRequestController extends Controller
 {
 
     public function index()
     {
         $users = User::all(); // For modal dropdown
         $user_dept = User::all(); // For modal dropdown
-        return view('admin.department.index', compact('users', 'user_dept'));
+        return view('admin.cuti.index', compact('users', 'user_dept'));
     }
 
     public function getDatatables(Request $request)
@@ -27,14 +27,6 @@ class DepartmentController extends Controller
             ->addIndexColumn()
             ->addColumn('leader', function ($row) {
                 return $row->leader ? $row->leader->name : '-';
-            })
-            ->addColumn('users', function ($row) {
-                if ($row->users->isEmpty()) {
-                    return '<span class="text-muted">No users assigned</span>';
-                }
-                return $row->users->map(function ($user) {
-                    return '<span class="label label-primary" style="margin: 2px;">' . e($user->name) . '</span>';
-                })->implode(' ');
             })
             ->addColumn('action', function ($row) {
                 return '

@@ -16,6 +16,7 @@
 @section('content')
     <div class="row" style="margin-top: 60px">
         <div class="col">
+            <p>Leave Quota: {{ $leaveQuota }} days</p>
             @php
                 $messageSuccess = Session::get('success');
                 $messageError = Session::get('error');

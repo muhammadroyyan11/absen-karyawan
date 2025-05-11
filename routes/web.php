@@ -13,6 +13,7 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\admin\GroamingStaffController;
 use App\Http\Controllers\admin\JadwalInputController;
 use App\Http\Controllers\admin\DepartmentController;
+use App\Http\Controllers\admin\CutiRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,16 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/departments/{id}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
     Route::post('/departments/{id}/update', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('/departments/{id}/delete', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+    Route::post('/departments/assign-users', [DepartmentController::class, 'assignUsers'])->name('departments.assignUsers');
+
+    // Approval Cuti Request route
+    Route::get('/cuti', [CutiRequestController::class, 'index'])->name('cuti.index');
+    Route::get('/cuti/data', [CutiRequestController::class, 'getDatatables'])->name('cuti.data');
+    Route::post('/cuti/store', [CutiRequestController::class, 'store'])->name('cuti.store');
+    Route::get('/cuti/{id}/edit', [CutiRequestController::class, 'edit'])->name('cuti.edit');
+    Route::post('/cuti/{id}/update', [CutiRequestController::class, 'update'])->name('cuti.update');
+    Route::delete('/cuti/{id}/delete', [CutiRequestController::class, 'destroy'])->name('cuti.destroy');
+    Route::post('/cuti/assign-users', [CutiRequestController::class, 'assignUsers'])->name('cuti.assignUsers');
 
     Route::get('/rekap-absen', [RekapAdminController::class, 'index']);
     Route::get('/request-cuti-list', [CutiAdminController::class, 'index']);

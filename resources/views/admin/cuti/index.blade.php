@@ -46,9 +46,9 @@
         </section>
     </div>
 
-    @include('admin.department.modal')
+    @include('admin.cuti.modal')
 
 @endsection
 
-@include('admin.department.js')
+@include('admin.cuti.js')
 

@@ -1,18 +1,11 @@
 @section('scripts')
     <script>
-        // $(function () {
-        //     //Initialize Select2 Elements
-        //     $('.select2').select2();
-        //
-        // });
-        //
         $(document).ready(function () {
 
-
-            var table = $('#departments-table').DataTable({
+            var table = $('#cuti-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('departments.data') }}",
+                ajax: "{{ route('cuti.data') }}",
                 columns: [
                     {
                         data: 'DT_RowIndex',
@@ -41,7 +34,7 @@
 
             $(document).on('click', '.edit', function () {
                 var id = $(this).data('id');
-                $.get('/departments/' + id + '/edit', function (data) {
+                $.get('/cuti/' + id + '/edit', function (data) {
                     $('#id').val(data.id);
                     $('#name').val(data.name);
                     $('#leader_id').val(data.leader_id);
@@ -74,7 +67,7 @@
             $('#form').submit(function (e) {
                 e.preventDefault();
                 var id = $('#id').val();
-                var url = id ? '/departments/' + id + '/update' : '/departments/store';
+                var url = id ? '/cuti/' + id + '/update' : '/cuti/store';
 
                 $.ajax({
                     url: url,
@@ -93,7 +86,7 @@
             $(document).on('click', '.delete', function () {
                 if (confirm('Yakin hapus?')) {
                     $.ajax({
-                        url: '/departments/' + $(this).data('id') + '/delete',
+                        url: '/cuti/' + $(this).data('id') + '/delete',
                         type: 'DELETE',
                         data: {_token: '{{ csrf_token() }}'},
                         success: function () {
@@ -119,12 +112,12 @@
                 e.preventDefault();
 
                 $.ajax({
-                    url: '{{ route("departments.assignUsers") }}',
+                    url: '{{ route("cuti.assignUsers") }}',
                     type: 'POST',
                     data: $(this).serialize(),
                     success: function (res) {
                         $('#setUsersModal').modal('hide');
-                        $('#departments-table').DataTable().ajax.reload();
+                        $('#cuti-table').DataTable().ajax.reload();
                         alert(res.message);
                     },
                     error: function (err) {

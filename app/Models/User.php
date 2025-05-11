@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -36,4 +37,22 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class);
     }
 
+    public function employmentType()
+    {
+        return $this->belongsTo(EmploymentType::class);
+    }
+
+    public function getLeaveQuota()
+    {
+        $userId = Auth::user()->id;
+        $employmentType = User::find($userId)->employmentType->name;
+
+        if ($employmentType === 'Fulltime') {
+            return 6;
+        } elseif ($employmentType === 'Parttime') {
+            return 0;
+        }
+
+        return 0;
+    }
 }

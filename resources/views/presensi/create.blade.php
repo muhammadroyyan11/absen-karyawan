@@ -133,7 +133,7 @@
 
     const centerLat = -7.945221934890168;
     const centerLng = 112.61913974639859;
-    const maxDistanceMeters = 10;
+    const maxDistanceMeters = 100;
 
     let map, marker, withinRadius = false;
 

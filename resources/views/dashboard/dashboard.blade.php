@@ -68,11 +68,8 @@
                         <div class="card-body">
                             <div class="presencecontent">
                                 <div class="iconpresence">
-                                    @if($data['presensiHarian'] != null)
-                                        @php
-                                            $path = \Illuminate\Support\Facades\Storage::url('uploads/absensi/'.$data['presensiHarian']->foto_in);
-                                        @endphp
-                                        <img src="{{ url($path) }}" class="imaged w64">
+                                    @if($data['presensiHarian'] && $data['presensiHarian']->foto_in)
+                                        <img src="{{ asset(Storage::url('uploads/absensi/' . $data['presensiHarian']->foto_in)) }}" class="imaged w64">
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
@@ -90,11 +87,8 @@
                         <div class="card-body">
                             <div class="presencecontent">
                                 <div class="iconpresence">
-                                    @if($data['presensiHarian'] != null && $data['presensiHarian']->jam_out != null)
-                                        @php
-                                            $path = \Illuminate\Support\Facades\Storage::url('uploads/absensi/'.$data['presensiHarian']->foto_out);
-                                        @endphp
-                                        <img src="{{ url($path) }}" class="imaged w64">
+                                    @if($data['presensiHarian'] && $data['presensiHarian']->foto_out)
+                                        <img src="{{ asset(Storage::url('uploads/absensi/' . $data['presensiHarian']->foto_out)) }}" class="imaged w64">
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
@@ -223,3 +217,6 @@
         </div>
     </div>
 @endsection
+@include('dashboard.dashboard_js')
+
+

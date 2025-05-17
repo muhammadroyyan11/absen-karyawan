@@ -37,9 +37,8 @@
             <input type="hidden" id="lokasi">
             <div class="webcam-wrapper position-relative">
                 <div class="webcam-capture"></div>
-                <button id="switchCamera"
-                        class="btn btn-sm btn-light position-absolute d-flex align-items-center gap-1"
-                        style="top: 10px; right: 10px; z-index: 10;">
+                <button id="switchCamera" class="btn btn-sm btn-light position-absolute d-flex align-items-center gap-1"
+                    style="top: 10px; right: 10px; z-index: 10;">
                     <ion-icon name="camera-reverse-outline"></ion-icon>
                     Ganti
                 </button>
@@ -49,7 +48,7 @@
 
     <div class="row">
         <div class="col">
-            @if($data['check'] > 0)
+            @if ($data['check'] > 0)
                 <button id="absen" class="btn btn-primary btn-block">
                     <ion-icon name="camera-outline"></ion-icon>
                     Absen Pulang
@@ -70,7 +69,8 @@
     </div>
 
     <!-- Loading overlay -->
-    <div id="loadingOverlay" style="display: none;
+    <div id="loadingOverlay"
+        style="display: none;
         position: fixed;
         top: 0; left: 0;
         width: 100vw;
@@ -92,11 +92,9 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-o9N1j7kC1b8zX+0p06gC1xkz+uYnEutP3pZCk2W0Xqo="
-            crossorigin=""></script>
+        integrity="sha256-o9N1j7kC1b8zX+0p06gC1xkz+uYnEutP3pZCk2W0Xqo=" crossorigin=""></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-sA+4jvibvVVjwlTlU2d+xvAqaaKYF7dLndpk+z4gD3I="
-          crossorigin=""/>
+        integrity="sha256-sA+4jvibvVVjwlTlU2d+xvAqaaKYF7dLndpk+z4gD3I=" crossorigin="" />
 
     <script>
         let useFrontCamera = false;
@@ -118,7 +116,7 @@
             Webcam.attach('.webcam-capture');
 
             // Wait for camera live event
-            Webcam.on('live', function () {
+            Webcam.on('live', function() {
                 cameraReady = true;
                 $('#loadingOverlay').hide();
             });
@@ -128,40 +126,116 @@
         startCamera();
 
         // Switch camera
-        document.getElementById('switchCamera').addEventListener('click', function () {
+        document.getElementById('switchCamera').addEventListener('click', function() {
             useFrontCamera = !useFrontCamera;
             startCamera();
         });
 
-        // Ambil lokasi
+        // ambil lokasi
         var lokasi = document.getElementById('lokasi');
+
+        const centerLat = -7.945221934890168;
+        const centerLng = 112.61913974639859;
+        const maxDistanceMeters = 5;
+
+        let map, marker;
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+            // Ambil posisi awal real-time terlebih dahulu (sekali)
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    handleLocation(position); // proses awal
+                    // Setelah berhasil, lanjutkan pemantauan terus-menerus
+                    navigator.geolocation.watchPosition(handleLocation, errorCallback, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    });
+                },
+                errorCallback, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            alert("Browser Anda tidak mendukung geolocation.");
         }
 
-        function successCallback(coordinate) {
-            lokasi.value = coordinate.coords.latitude + "," + coordinate.coords.longitude;
-            var map = L.map('map').setView([coordinate.coords.latitude, coordinate.coords.longitude], 18);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(map);
+        function handleLocation(coordinate) {
+            const lat = coordinate.coords.latitude;
+            const lng = coordinate.coords.longitude;
 
-            L.marker([coordinate.coords.latitude, coordinate.coords.longitude]).addTo(map);
-            L.circle([coordinate.coords.latitude, coordinate.coords.longitude], {
-                color: 'red',
-                fillColor: 'rgba(11,253,0,0.13)',
-                fillOpacity: 0.5,
-                radius: 20
-            }).addTo(map);
+            const distance = getDistanceFromLatLonInMeters(lat, lng, centerLat, centerLng);
+
+            if (distance <= maxDistanceMeters) {
+                lokasi.value = lat + "," + lng;
+            } else {
+                lokasi.value = "";
+                alert("⚠️ Anda berada di luar radius absensi yang diizinkan (" + Math.round(distance) + " meter).");
+            }
+
+            // Inisialisasi peta jika belum ada
+            if (!map) {
+                map = L.map('map').setView([lat, lng], 18);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                // Tambahkan lingkaran radius tetap
+                L.circle([centerLat, centerLng], {
+                    color: 'red',
+                    fillColor: 'rgba(11,253,0,0.13)',
+                    fillOpacity: 0.5,
+                    radius: maxDistanceMeters
+                }).addTo(map);
+
+                marker = L.marker([lat, lng]).addTo(map);
+            } else {
+                marker.setLatLng([lat, lng]);
+                map.setView([lat, lng]);
+            }
         }
 
-        function errorCallback() {
-            console.error("Lokasi tidak ditemukan.");
+        function errorCallback(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert(
+                        "⚠️ Akses lokasi ditolak. Silakan aktifkan lokasi dan izinkan akses lokasi untuk menggunakan fitur ini.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("⚠️ Lokasi tidak tersedia.");
+                    break;
+                case error.TIMEOUT:
+                    alert("⚠️ Permintaan lokasi melebihi batas waktu.");
+                    break;
+                default:
+                    alert("⚠️ Terjadi kesalahan saat mengambil lokasi.");
+                    break;
+            }
         }
+
+        function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
+            const R = 6371000;
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+
 
         // Tombol Absen
-        $('#absen').click(function (e) {
+        $('#absen').click(function(e) {
             if (!cameraReady) {
                 Swal.fire({
                     title: 'Kamera belum siap',
@@ -173,7 +247,7 @@
 
             $('#loadingOverlay').show();
 
-            Webcam.snap(function (uri) {
+            Webcam.snap(function(uri) {
                 var lokasi = $('#lokasi').val();
                 $.ajax({
                     type: 'POST',
@@ -184,7 +258,7 @@
                         lokasi: lokasi
                     },
                     cache: false,
-                    success: function (respon) {
+                    success: function(respon) {
                         $('#loadingOverlay').hide();
                         var status = respon.split('|');
                         if (status[0] === 'success') {
@@ -205,7 +279,7 @@
                             });
                         }
                     },
-                    error: function () {
+                    error: function() {
                         $('#loadingOverlay').hide();
                         Swal.fire({
                             title: 'Gagal!',

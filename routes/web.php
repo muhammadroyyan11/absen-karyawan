@@ -72,7 +72,7 @@ Route::middleware(['auth:user'])->group(function (){
 
     //input jadwal
     Route::get('/jadwal-input', [\App\Http\Controllers\admin\JadwalInputController::class, 'index']);
-    Route::get('/get-data-jadwal', [\App\Http\Controllers\admin\JadwalInputController::class, 'getDatatables']);
+    Route::get('/jadwal/data', [JadwalInputController::class, 'getDatatables'])->name('jadwal.data');
     Route::get('/jadwal/export-template', [JadwalInputController::class, 'exportTemplate']);
     Route::post('/jadwal/import', [JadwalInputController::class, 'import'])->name('jadwal.import');
 

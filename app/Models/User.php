@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->belongsTo(EmploymentType::class);
     }
 
+    public function presensis()
+    {
+        return $this->hasMany(Presensi::class, 'u_id');
+    }
+
     public function getLeaveQuota()
     {
         $userId = Auth::user()->id;

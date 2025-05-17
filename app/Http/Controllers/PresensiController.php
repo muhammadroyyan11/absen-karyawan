@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\WorkSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,7 @@ class PresensiController extends Controller
         $check_absen = DB::table('presensi')->where('tgl_presensi', $today_date)->where('u_id', $u_id)->count();
 
         $data = [
-            'check'     => $check_absen
+            'check' => $check_absen
         ];
         return view('presensi.create', compact('data'));
     }
@@ -32,9 +33,11 @@ class PresensiController extends Controller
         $jam = date('H:i:s');
         $location = $request->lokasi;
 
+
+//        dd($request);
         $check_absen = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('u_id', $u_id)->count();
 
-        if ($check_absen > 0){
+        if ($check_absen > 0) {
             $ket = "out";
         } else {
             $ket = "in";
@@ -42,30 +45,43 @@ class PresensiController extends Controller
 
         $image = $request->image;
         $folderPath = "public/uploads/absensi/";
-        $formatName = rand() .'-' . $ket . '-' . $nik . '-' . $tgl_presensi;
+        $formatName = rand() . '-' . $ket . '-' . $nik . '-' . $tgl_presensi;
         $image_parts = explode(";base64", $image);
         $image_base64 = base64_decode($image_parts[1]);
-        $fileName = $formatName.".png";
+        $fileName = $formatName . ".png";
         $file = $folderPath . $fileName;
 
 
-        if ($check_absen > 0){
+        if ($check_absen > 0) {
             $params = [
-                'jam_out'       => $jam,
-                'foto_out'      => $fileName,
-                'location_out'   => $location
+                'jam_out' => $jam,
+                'foto_out' => $fileName,
+                'location_out' => $location
             ];
 
             $action = DB::table('presensi')->where('u_id', $u_id)->where('tgl_presensi', $tgl_presensi)->update($params);
             echo 'success|Terima Kasih Buat Hari Ini, Hati Hati Di Jalan Ya Jez😁|out';
 
         } else {
+            $jadwal = WorkSchedule::where('user_id', $u_id)
+                ->where('date', $tgl_presensi)
+                ->first();
+
+//            dd($jadwal); // Lihat apakah ada data yang ditemukan
+
+            if (!$jadwal) {
+                return response()->json(['error' => 'Jadwal belum diatur untuk hari ini.'], 422);
+            }
+
+            $shift_id_user_days = $jadwal->shift_id;
+
             $params = [
-                'u_id'          => $u_id,
-                'tgl_presensi'  => $tgl_presensi,
-                'jam_in'        => $jam,
-                'foto_in'       => $fileName,
-                'location_in'   => $location
+                'u_id' => $u_id,
+                'shift_id' => $shift_id_user_days,
+                'tgl_presensi' => $tgl_presensi,
+                'jam_in' => $jam,
+                'foto_in' => $fileName,
+                'location_in' => $location
             ];
 
             $action = DB::table('presensi')->insert($params);
@@ -74,8 +90,8 @@ class PresensiController extends Controller
             echo 'success|Terima Kasih, Selamat Bekerja|in';
         }
 
-        if ($action){
-            Storage::put($file,$image_base64);
+        if ($action) {
+            Storage::put($file, $image_base64);
         }
 
     }
@@ -87,27 +103,27 @@ class PresensiController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $id         = Auth::user()->id;
-        $nama       = $request->nama_lengkap;
-        $no_hp      = $request->no_hp;
-        $password      = Hash::make($request->password);
+        $id = Auth::user()->id;
+        $nama = $request->nama_lengkap;
+        $no_hp = $request->no_hp;
+        $password = Hash::make($request->password);
 
-        if (!empty($request->password)){
+        if (!empty($request->password)) {
             $params = [
-                'name'      => $nama,
-                'no_hp'     => $no_hp,
-                'password'  => $password
+                'name' => $nama,
+                'no_hp' => $no_hp,
+                'password' => $password
             ];
         } else {
             $params = [
-                'name'      => $nama,
-                'no_hp'     => $no_hp
+                'name' => $nama,
+                'no_hp' => $no_hp
             ];
         }
 
         $update = DB::table('users')->where('id', $id)->update($params);
 
-        if ($update){
+        if ($update) {
             return Redirect::back()->with(['success' => 'Data Berhasil Di Update']);
         } else {
             return Redirect::back()->with(['error' => 'Terjadi Keasalahan']);
@@ -122,11 +138,11 @@ class PresensiController extends Controller
 
     public function getHistory(Request $request)
     {
-        $id         = Auth::user()->id;
-        $bulan      = $request->bulan;
-        $tahun      = $request->tahun;
+        $id = Auth::user()->id;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
 
-        $history    = DB::table('presensi')
+        $history = DB::table('presensi')
             ->whereRaw('MONTH(tgl_presensi) = ?', [$bulan])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$tahun])
             ->where('u_id', $id)
@@ -220,8 +236,8 @@ class PresensiController extends Controller
 
     public function cuti(User $user)
     {
-        $id         = Auth::user()->id;
-        $dataizin   = DB::table('pengajuan_cuti')->where('u_id', $id)->orderBy('tgl_izin', 'asc')->get();
+        $id = Auth::user()->id;
+        $dataizin = DB::table('pengajuan_cuti')->where('u_id', $id)->orderBy('tgl_izin', 'asc')->get();
         $leaveQuota = $user->getLeaveQuota();
 
 
@@ -251,22 +267,22 @@ class PresensiController extends Controller
 
     public function store_cuti(Request $request)
     {
-        $id         = Auth::user()->id;
-        $tanggal    = $request->tanggal;
-        $status     = $request->status;
+        $id = Auth::user()->id;
+        $tanggal = $request->tanggal;
+        $status = $request->status;
         $keterangan = $request->keterangan;
 
         $params = [
-            'u_id'              => $id,
-            'tgl_izin'          => $tanggal,
-            'keterangan'        => $keterangan,
-            'status'            => $status,
-            'status_approved'   => 0
+            'u_id' => $id,
+            'tgl_izin' => $tanggal,
+            'keterangan' => $keterangan,
+            'status' => $status,
+            'status_approved' => 0
         ];
 
         $action = DB::table('pengajuan_cuti')->insert($params);
 
-        if ($action){
+        if ($action) {
             return redirect('/presensi/cuti')->with(['success' => 'Data Berhasil Diajukan']);
         } else {
             return redirect('/presensi/cuti')->with(['error' => 'Terjadi kesalahan!']);

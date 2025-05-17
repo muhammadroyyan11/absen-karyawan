@@ -16,4 +16,9 @@ class Shifts extends Model
     {
         return $this->hasMany(jadwals::class);
     }
+
+    public function workSchedules()
+    {
+        return $this->hasMany(WorkSchedule::class, 'shift_id');
+    }
 }

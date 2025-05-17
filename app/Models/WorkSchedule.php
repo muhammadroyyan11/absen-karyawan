@@ -22,7 +22,7 @@ class WorkSchedule extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function shift(): BelongsTo
+    public function shifts(): BelongsTo
     {
         return $this->belongsTo(Shifts::class);
     }

@@ -100,6 +100,21 @@
     let useFrontCamera = false;
     let cameraReady = false;
 
+    var lokasi = document.getElementById('lokasi');
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    }
+
+    function successCallback(coordinate) {
+        lokasi.value = coordinate.coords.latitude + "," + coordinate.coords.longitude;
+        // var map = L.map('map').setView([coordinate.coords.latitude, coordinate.coords.longitude], 18);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+    }
+
     function startCamera() {
         $('#loadingOverlay').show();
         cameraReady = false;
@@ -131,6 +146,7 @@
         startCamera();
     });
 
+    // defind office location
     const centerLat = -7.945221934890168;
     const centerLng = 112.61913974639859;
     const maxDistanceMeters = 100;
@@ -167,7 +183,7 @@
             lokasi.value = lat + "," + lng;
             withinRadius = true;
         } else {
-            lokasi.value = "";
+            // lokasi.value = "";
             withinRadius = false;
         }
 
@@ -248,10 +264,15 @@
             return;
         }
 
+        // console.log($('#lokasi').val())
+
         $('#loadingOverlay').show();
 
         Webcam.snap(function(uri) {
             var lokasi = $('#lokasi').val();
+
+
+
             $.ajax({
                 type: 'POST',
                 url: '/presensi/store',
@@ -282,11 +303,20 @@
                         });
                     }
                 },
-                error: function() {
+                error: function(xhr) {
                     $('#loadingOverlay').hide();
+
+                    let message = 'Terjadi kesalahan sistem.';
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        message = xhr.responseJSON.error;
+                    }
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        message = xhr.responseJSON.error;
+                    }
+
                     Swal.fire({
                         title: 'Gagal!',
-                        text: 'Terjadi kesalahan jaringan.',
+                        text: message,
                         icon: 'error',
                         confirmButtonText: 'OK'
                     });

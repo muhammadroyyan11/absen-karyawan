@@ -57,7 +57,7 @@ class PresensiController extends Controller
             ];
 
             $action = DB::table('presensi')->where('u_id', $u_id)->where('tgl_presensi', $tgl_presensi)->update($params);
-            echo 'success|Terima Kasih, Hati Hati Di Jalan|out';
+            echo 'success|Terima Kasih Buat Hari Ini, Hati Hati Di Jalan Ya Jez😁|out';
 
         } else {
             $params = [

@@ -19,27 +19,23 @@ class JadwalController extends Controller
 
     public function getJadwalCalendar(Request $request)
     {
-        // Mendapatkan user yang sedang login
         $userId = auth()->user()->id;
 
-        // Ambil bulan dan tahun dari request, jika tidak ada gunakan bulan dan tahun sekarang
         $bulan = $request->bulan ?? now()->month;
         $tahun = $request->tahun ?? now()->year;
 
-        // Ambil data jadwal berdasarkan bulan, tahun, dan user_id yang sedang login
-        $schedules = jadwals::where('user_id', $userId) // Filter berdasarkan user_id yang login
+        $schedules = jadwals::where('user_id', $userId)
             ->get();
 
         $events = $schedules->map(function ($schedule) {
             $shiftName = $schedule->shift->name_shift ?? 'N/A';
             $description = $schedule->shift->description ?? '';
 
-            // Jika nama shift adalah "Libur", warnai merah
             $color = stripos($shiftName, 'Libur') !== false ? '#ff0000' : '#3788d8';
 
             return [
                 'title' => $shiftName,
-                'start' => $schedule->date->toDateString(), // Format start date
+                'start' => $schedule->date->toDateString(),
                 'end' => $schedule->date->toDateString(),
                 'description' => $description,
                 'color' => $color,
@@ -47,6 +43,6 @@ class JadwalController extends Controller
         });
 
 
-        return response()->json($events); // Mengirimkan data ke frontend dalam format JSON
+        return response()->json($events);
     }
 }

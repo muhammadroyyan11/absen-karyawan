@@ -173,7 +173,7 @@ class PresensiController extends Controller
 
     public function getPresensiDetail(Request $request)
     {
-        $tanggal = $request->date;  // Tanggal yang dikirimkan dari AJAX
+        $tanggal = $request->date;
 
         // Ambil data presensi berdasarkan tanggal
         $presensi = DB::table('presensi')
@@ -191,7 +191,6 @@ class PresensiController extends Controller
 
             $output .= '<h4>' . $hari . ', ' . $tanggal . '</h4>';
 
-            // Tabel informasi presensi
             $output .= '<table class="table table-borderless presensi-table">';
             $output .= '<tr><th>Jam Masuk</th><td>' . date('H:i', strtotime($item->jam_in)) . '</td></tr>';
             $output .= '<tr><th>Jam Keluar</th><td>' . ($item->jam_out ? date('H:i', strtotime($item->jam_out)) : '-') . '</td></tr>';
@@ -204,7 +203,7 @@ class PresensiController extends Controller
             $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $item->id . '" class="map" style="height: 200px;"></div>';
             $output .= '</div>';
 
-            $output .= '</div>'; // End of presensi-card
+            $output .= '</div>';
 
             $presensiData[] = [
                 'id' => $item->id,
@@ -222,7 +221,7 @@ class PresensiController extends Controller
     public function cuti(User $user)
     {
         $id         = Auth::user()->id;
-        $dataizin = DB::table('pengajuan_cuti')->where('u_id', $id)->orderBy('tgl_izin', 'asc')->get();
+        $dataizin   = DB::table('pengajuan_cuti')->where('u_id', $id)->orderBy('tgl_izin', 'asc')->get();
         $leaveQuota = $user->getLeaveQuota();
 
 

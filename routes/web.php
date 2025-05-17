@@ -25,7 +25,7 @@ use App\Http\Controllers\admin\CutiRequestController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['auth', 'check.session'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);

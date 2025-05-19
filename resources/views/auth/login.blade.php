@@ -8,10 +8,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
-    <title>Mobilekit Mobile UI Kit</title>
+    <title>Presensi Jez</title>
     <meta name="description" content="Mobilekit HTML Mobile UI Kit">
     <meta name="keywords" content="bootstrap 4, mobile template, cordova, phonegap, mobile, html" />
-    <link rel="icon" type="image/png" href="assets/img/favicon.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="assets/img/Logo SZ White@2x.png" sizes="1534x1321">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/192x192.png">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="manifest" href="__manifest.json">
@@ -33,10 +33,10 @@
 
         <div class="login-form mt-1">
             <div class="section">
-                <img src="{{ asset('assets/img/sample/photo/vector4.png') }}" alt="image" class="form-image">
+                <img src="{{ asset('assets/img/sample/photo/Logo JEZ Sport@2x.png') }}" alt="image" class="form-image">
             </div>
             <div class="section mt-1">
-                <h1>Get started</h1>
+                <h1>Get Started</h1>
                 <h4>LOGIN JEZ😊!</h4>
             </div>
             <div class="section mt-1 mb-5">
@@ -53,7 +53,7 @@
                     <div class="form-group boxed">
                         <div class="input-wrapper">
                             <input type="text" class="form-control" id="nik" name="nik"
-                                placeholder="Id Staff Jez">
+                                placeholder="Id Staff">
                             <i class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </i>
@@ -88,23 +88,66 @@
             h1, h4 {
                 color: white;
             }
+            .login-form {
+                background: rgba(255, 255, 255, 0.25);
+                border-radius: 16px;
+                box-shadow: 0 4px 32px 0 rgba(0,0,0,0.15);
+                padding: 32px 24px 24px 24px;
+                backdrop-filter: blur(6px);
+            }
+            .form-links a {
+                color: #fff !important;
+            }
+            .form-links .text-muted {
+                color: #fff !important;
+            }
+            .form-button-group .btn {
+                background: #dc3545;
+                color: #fff;
+                border: none;
+                box-shadow: none;
+                border-radius: 8px;
+                padding: 12px 0;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .form-button-group .btn,
+            .form-button-group .btn:focus,
+            .form-button-group .btn:active {
+                background: #dc3545 !important;
+                color: #fff !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+
+            .form-button-group {
+                background: transparent !important;
+                box-shadow: none !important;
+            }
             .login-bg {
                 position: fixed;
                 top: 0;
                 left: 0;
-                width: 100%;
-                height: 100%;
+                width: 100vw;
+                height: 100vh;
                 z-index: -1;
                 overflow: hidden;
             }
 
             .login-bg .bg-image {
-                width: 100%;
-                height: 100%;
+                width: 100vw;
+                height: 100vh;
                 object-fit: cover;
                 filter: brightness(0.5);
-                /* opsional: gelapkan agar teks terlihat jelas */
             }
+
+            /* Ensure background stays behind everything including the button group */
+            .login-form, .login-form * {
+                position: relative;
+                z-index: 1;
+            }
+
 
         </style>
 

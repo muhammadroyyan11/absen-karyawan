@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exports\WorkScheduleTemplateExport;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\WorkScheduleImport;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
 
 class JadwalInputController extends Controller
 {
@@ -31,7 +33,7 @@ class JadwalInputController extends Controller
         $department = Department::all();
 
         $data = [
-            'title' => 'Dashboard',
+            'title' => 'Jadwal / Rekap Absensi',
             'history' => $history,
             'department' => $department,
         ];
@@ -42,13 +44,6 @@ class JadwalInputController extends Controller
 
     public function getDatatables(Request $request)
     {
-//        $data = WorkSchedule::with(['user', 'shifts'])
-//            ->orderBy('date', 'desc');
-//
-//        $data = DB::table("work_schedules")
-//            ->join('users', 'users.id', '=', 'work_schedules.user_id')
-//            ->
-
         $data = DB::table('work_schedules')
             ->leftJoin('users', 'users.id', '=', 'work_schedules.user_id')
             ->leftJoin('shifts', 'shifts.id', '=', 'work_schedules.shift_id')
@@ -65,6 +60,7 @@ class JadwalInputController extends Controller
                 'presensi.jam_in as absen_datang',
                 'presensi.jam_out as absen_pulang',
                 'departments.name as departments_name',
+                'users.id as user_id',
             )
             ->orderBy('work_schedules.date', 'desc');
 
@@ -91,12 +87,92 @@ class JadwalInputController extends Controller
 //            ->addColumn('absen_datang', function ($row) {
 //                return ($row->jam_in === null || $row->jam_in === '') ? '-' : $row->jam_in;
 //            })
+            ->editColumn('tanggal_absen', function ($row) {
+                return Carbon::parse($row->tanggal_absen)->translatedFormat('l, d F Y');
+            })
             ->addColumn('aksi', function ($row) {
-                return '<button class="btn btn-sm btn-info">Detail</button>';
+                return '<button class="btn btn-sm btn-info" id="btn-detail-presensi" data-user-id="' . $row->user_id . '" data-date="' . $row->tanggal_absen . '">Detail</button>';
             })
             ->rawColumns(['aksi'])
             ->make(true);
     }
+
+    public function getPresensiDetail(Request $request)
+    {
+        $tanggal = $request->date;
+        $user_id = $request->user_id;
+
+//        dd($tanggal);
+
+        $presensi = DB::table('users')
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
+            ->leftJoin('work_schedules', function ($join) use ($tanggal) {
+                $join->on('work_schedules.user_id', '=', 'users.id')
+                    ->whereDate('work_schedules.date', $tanggal);
+            })
+            ->leftJoin('shifts', 'shifts.id', '=', 'work_schedules.shift_id')
+            ->leftJoin('presensi', function ($join) use ($tanggal) {
+                $join->on('presensi.u_id', '=', 'users.id')
+                    ->whereDate('presensi.tgl_presensi', $tanggal);
+            })
+            ->where('users.id', $user_id)
+            ->select(
+                'users.name',
+                'users.nik',
+                'departments.name as divisi',
+                'presensi.*',
+                'shifts.name_shift as shift_name',
+                'work_schedules.date as shift_date'
+            )
+            ->first();
+
+        if (!$presensi) {
+            return response()->json(['html' => '<p>Data tidak ditemukan</p>']);
+        }
+
+        $output = '<div class="presensi-card">';
+        $output .= '<table class="table table-bordered">';
+
+        $output .= '<tr><th>Nama</th><td>' . $presensi->name . '</td></tr>';
+        $output .= '<tr><th>NIK</th><td>' . $presensi->nik . '</td></tr>';
+        $output .= '<tr><th>Divisi</th><td>' . $presensi->divisi . '</td></tr>';
+        $output .= '<tr><th>Tanggal Shift</th><td>' . Carbon::parse($presensi->shift_date)->translatedFormat('l, d F Y') . '</td></tr>';
+        $output .= '<tr><th>Shift</th><td>' . $presensi->shift_name . '</td></tr>';
+
+        $output .= '<tr><th>Jam Masuk</th><td>' . ($presensi->jam_in ? date('H:i', strtotime($presensi->jam_in)) : '-') . '</td></tr>';
+        $output .= '<tr><th>Jam Keluar</th><td>' . ($presensi->jam_out ? date('H:i', strtotime($presensi->jam_out)) : '-') . '</td></tr>';
+
+        $output .= '<tr><th>Foto Masuk</th><td>' . ($presensi->foto_in ? '<img src="' . Storage::url('uploads/absensi/' . $presensi->foto_in) . '" width="120">' : '-') . '</td></tr>';
+        $output .= '<tr><th>Foto Keluar</th><td>' . ($presensi->foto_out ? '<img src="' . Storage::url('uploads/absensi/' . $presensi->foto_out) . '" width="120">' : '-') . '</td></tr>';
+
+        $output .= '</table>';
+
+        // Peta lokasi
+        $output .= '<div class="maps-container">';
+//        $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $presensi->id . '" class="map" style="height: 200px;"></div>';
+//        $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $presensi->id . '" class="map" style="height: 200px;"></div>';
+
+        if (!empty($presensi->location_in)) {
+            $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $presensi->id . '" class="map" style="height: 200px;"></div>';
+        }
+
+        if (!empty($presensi->location_out)) {
+            $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $presensi->id . '" class="map" style="height: 200px;"></div>';
+        }
+        $output .= '</div>';
+
+        $output .= '</div>';
+
+        return response()->json([
+            'html' => $output,
+            'presensi' => [[
+                'id' => $presensi->id,
+                'location_in' => $presensi->location_in,
+                'location_out' => $presensi->location_out
+            ]]
+        ]);
+    }
+
 
     public function exportTemplate(Request $request)
     {

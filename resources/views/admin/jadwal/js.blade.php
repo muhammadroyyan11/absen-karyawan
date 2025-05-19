@@ -65,6 +65,66 @@
                 });
             }
 
+            {{--$(document).on('click', '#btn-detail', function() {--}}
+            {{--    var date = $(this).data('date');--}}
+
+            {{--    $.ajax({--}}
+            {{--        url: '{{ route("") }}',--}}
+            {{--        method: 'GET',--}}
+            {{--        data: { date: date },--}}
+            {{--        success: function(response) {--}}
+            {{--            $('#detailPresensiContent').html(response.html);--}}
+            {{--            $('#modalDetailPresensi').modal('show');--}}
+
+            {{--            setTimeout(() => {--}}
+            {{--                response.presensi.forEach(item => {--}}
+            {{--                    initLeafletMap('mapIn' + item.id, item.location_in);--}}
+            {{--                    initLeafletMap('mapOut' + item.id, item.location_out);--}}
+            {{--                });--}}
+            {{--            }, 300); // beri sedikit delay agar div-nya muncul dulu--}}
+            {{--        },--}}
+            {{--        error: function() {--}}
+            {{--            alert('Gagal memuat data.');--}}
+            {{--        }--}}
+            {{--    });--}}
+            {{--});--}}
+
+            $(document).on('click', '#btn-detail-presensi', function() {
+                const user_id = $(this).data('user-id');
+                const date = $(this).data('date');
+
+                $.ajax({
+                    url: '{{ route("jadwal.presensi.detail") }}',
+                    type: 'GET',
+                    data: { user_id, date },
+                    success: function(response) {
+                        $('#detailPresensiContent').html(response.html);
+                        $('#modalDetailPresensi').modal('show');
+
+                        setTimeout(() => {
+                            response.presensi.forEach(item => {
+                                initLeafletMap('mapIn' + item.id, item.location_in);
+                                initLeafletMap('mapOut' + item.id, item.location_out);
+                            });
+                        }, 300);
+                    }
+                });
+            });
+
+            function initLeafletMap(elementId, coords) {
+                if (!coords) return;
+
+                const [lat, lng] = coords.split(',').map(parseFloat);
+                const map = L.map(elementId).setView([lat, lng], 16);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                }).addTo(map);
+
+                L.marker([lat, lng]).addTo(map);
+            }
+
+
             $('#date_range').daterangepicker({
                 autoUpdateInput: false,
                 locale: {

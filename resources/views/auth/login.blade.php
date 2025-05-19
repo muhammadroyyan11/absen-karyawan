@@ -94,6 +94,22 @@
                 box-shadow: 0 4px 32px 0 rgba(0,0,0,0.15);
                 padding: 32px 24px 24px 24px;
                 backdrop-filter: blur(6px);
+                max-width: 420px;
+                margin: 0 auto;
+            }
+
+            .form-image {
+                width: 100%;
+                max-width: 200px;
+                height: auto;
+                display: block;
+                margin: 0 auto 20px;
+            }
+
+            @media (max-width: 375px) {
+                .login-form {
+                    padding: 24px 16px 16px 16px;
+                }
             }
             .form-links a {
                 color: #fff !important;

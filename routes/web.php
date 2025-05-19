@@ -75,6 +75,7 @@ Route::middleware(['auth:user'])->group(function (){
     Route::get('/jadwal/data', [JadwalInputController::class, 'getDatatables'])->name('jadwal.data');
     Route::get('/jadwal/export-template', [JadwalInputController::class, 'exportTemplate']);
     Route::post('/jadwal/import', [JadwalInputController::class, 'import'])->name('jadwal.import');
+    Route::get('/jadwal/presensi-detail', [JadwalInputController::class, 'getPresensiDetail'])->name('jadwal.presensi.detail');
 
     //foto groaming drive
     Route::get('/rekap-groaming', [GroamingStaffController::class, 'index']);

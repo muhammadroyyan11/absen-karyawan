@@ -1,14 +1,17 @@
 @extends('layout.presensi')
 @section('content')
     <div class="section" id="user-section">
-        <div id="user-detail">
-            <div class="avatar">
-                <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
+        <div id="user-detail" class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div class="avatar">
+                    <img src="assets/img/sample/avatar/avatar1.jpg" alt="avatar" class="imaged w64 rounded">
+                </div>
+                <div id="user-info" class="ms-2">
+                    <h3 id="user-name">{{ Auth::user()->name }}</h3>
+                    <span id="user-role">{{ Auth::user()->jabatan }}</span>
+                </div>
             </div>
-            <div id="user-info">
-                <h3 id="user-name">{{ Auth::user()->name }}</h3>
-                <span id="user-role">{{ Auth::user()->jabatan }}</span>
-            </div>
+            {{--            <button class="btn btn-warning rounded-pill px-4">Rest</button>--}}
         </div>
     </div>
 
@@ -18,12 +21,12 @@
                 <div class="list-menu">
                     <div class="item-menu text-center">
                         <div class="menu-icon">
-                            <a href="" class="green" style="font-size: 40px;">
-                                <ion-icon name="person-sharp"></ion-icon>
+                            <a href="#" class="green" style="font-size: 40px;" data-bs-toggle="modal" data-bs-target="#modalIstirahat">
+                                <ion-icon name="time"></ion-icon>
                             </a>
                         </div>
                         <div class="menu-name">
-                            <span class="text-center">Profil</span>
+                            <span class="text-center">Istirahat</span><br>
                         </div>
                     </div>
                     <div class="item-menu text-center">
@@ -69,7 +72,9 @@
                             <div class="presencecontent">
                                 <div class="iconpresence">
                                     @if($data['presensiHarian'] && $data['presensiHarian']->foto_in)
-                                        <img src="{{ asset(Storage::url('uploads/absensi/' . $data['presensiHarian']->foto_in)) }}" class="imaged w64">
+                                        <img
+                                            src="{{ asset(Storage::url('uploads/absensi/' . $data['presensiHarian']->foto_in)) }}"
+                                            class="imaged w64">
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
@@ -88,7 +93,9 @@
                             <div class="presencecontent">
                                 <div class="iconpresence">
                                     @if($data['presensiHarian'] && $data['presensiHarian']->foto_out)
-                                        <img src="{{ asset(Storage::url('uploads/absensi/' . $data['presensiHarian']->foto_out)) }}" class="imaged w64">
+                                        <img
+                                            src="{{ asset(Storage::url('uploads/absensi/' . $data['presensiHarian']->foto_out)) }}"
+                                            class="imaged w64">
                                     @else
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
@@ -213,6 +220,26 @@
                     </ul>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal Istirahat -->
+    <div class="modal fade" id="modalIstirahat" tabindex="-1" aria-labelledby="modalIstirahatLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalIstirahatLabel">Status Istirahat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Apakah Anda ingin memulai istirahat sekarang?</p>
+                    <button class="btn btn-success me-2">Mulai Istirahat</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                </div>
             </div>
         </div>
     </div>

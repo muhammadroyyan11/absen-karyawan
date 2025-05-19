@@ -23,6 +23,8 @@
           crossorigin=""/>
 {{--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">--}}
     <link rel="manifest" href="__manifest.json">
+    <!-- Bootstrap CSS -->
+{{--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">--}}
 </head>
 
 <body style="background-color:#e9ecef;">

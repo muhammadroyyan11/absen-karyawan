@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Models\Presensi;
 use App\Models\WorkSchedule;
 use Illuminate\Http\Request;
@@ -27,9 +28,12 @@ class JadwalInputController extends Controller
             ->orderBy('tgl_presensi', 'DESC')
             ->get();
 
+        $department = Department::all();
+
         $data = [
             'title' => 'Dashboard',
-            'history' => $history
+            'history' => $history,
+            'department' => $department,
         ];
 
 //        dd($history);
@@ -48,6 +52,7 @@ class JadwalInputController extends Controller
         $data = DB::table('work_schedules')
             ->leftJoin('users', 'users.id', '=', 'work_schedules.user_id')
             ->leftJoin('shifts', 'shifts.id', '=', 'work_schedules.shift_id')
+            ->leftJoin('departments', 'departments.id', '=', 'users.department_id')
             ->leftJoin('presensi', function ($join) {
                 $join->on('presensi.u_id', '=', 'work_schedules.user_id')
                     ->whereRaw('DATE(presensi.tgl_presensi) = work_schedules.date');
@@ -58,11 +63,28 @@ class JadwalInputController extends Controller
                 'work_schedules.date as tanggal_absen',
                 'shifts.name_shift as shift_input',
                 'presensi.jam_in as absen_datang',
-                'presensi.jam_out as absen_pulang'
+                'presensi.jam_out as absen_pulang',
+                'departments.name as departments_name',
             )
             ->orderBy('work_schedules.date', 'desc');
 
 //        dd($data->get());
+
+        // Filter Divisi
+        if ($request->filled('divisi')) {
+            $data->where('departments.id', $request->divisi);
+        }
+
+        // Filter Date Range (format: "YYYY-MM-DD - YYYY-MM-DD")
+        if ($request->filled('date_range')) {
+            $dates = explode(' - ', $request->date_range);
+            if (count($dates) == 2) {
+                $startDate = $dates[0];
+                $endDate = $dates[1];
+                $data->whereBetween('work_schedules.date', [$startDate, $endDate]);
+            }
+        }
+
 
         return DataTables::of($data)
             ->addIndexColumn()

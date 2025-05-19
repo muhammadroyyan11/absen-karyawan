@@ -255,14 +255,14 @@
             return;
         }
 
-        if (!withinRadius) {
-            Swal.fire({
-                title: 'Lokasi Tidak Valid🥺',
-                text: '⚠️ Kamu Jauh Dari Kantor Nih Jez!',
-                icon: 'warning'
-            });
-            return;
-        }
+        // if (!withinRadius) {
+        //     Swal.fire({
+        //         title: 'Lokasi Tidak Valid🥺',
+        //         text: '⚠️ Kamu Jauh Dari Kantor Nih Jez!',
+        //         icon: 'warning'
+        //     });
+        //     return;
+        // }
 
         // console.log($('#lokasi').val())
 

@@ -203,8 +203,6 @@
                         const modal = new bootstrap.Modal(modalEl);
 
                         modalEl.addEventListener('shown.bs.modal', function () {
-                            // Panggil showLeafletMap dengan ID unik untuk setiap entri
-
                             response.presensi.forEach(function (item) {
                                 showLeafletMap(item.location_in, item.location_out, item.id);
                             });
@@ -262,7 +260,13 @@
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19
                 }).addTo(mapIn);
-                L.marker([lat, lng]).addTo(mapIn);
+
+                let markerIn = L.marker([lat, lng]).addTo(mapIn);
+                markerIn.bindPopup("Klik untuk melihat map lengkap").openPopup();
+                markerIn.on('click', function () {
+                    let url = `https://www.google.com/maps?q=${lat},${lng}`;
+                    window.open(url, '_blank');
+                });
             }
 
             if (locationOut) {
@@ -271,9 +275,17 @@
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19
                 }).addTo(mapOut);
-                L.marker([lat, lng]).addTo(mapOut);
+
+                let markerOut = L.marker([lat, lng]).addTo(mapOut);
+                markerOut.bindPopup("Klik untuk melihat map lengkap").openPopup();
+                markerOut.on('click', function () {
+                    let url = `https://www.google.com/maps?q=${lat},${lng}`;
+                    window.open(url, '_blank');
+                });
             }
         }
+
+
 
     </script>
 @endpush

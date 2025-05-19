@@ -67,7 +67,7 @@ class PresensiController extends Controller
                 ->where('date', $tgl_presensi)
                 ->first();
 
-//            dd($jadwal); // Lihat apakah ada data yang ditemukan
+//            dd($jadwal);
 
             if (!$jadwal) {
                 return response()->json(['error' => 'Jadwal belum diatur untuk hari ini.'], 422);

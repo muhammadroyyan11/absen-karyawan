@@ -26,146 +26,186 @@
     <!-- * loader -->
 
     <div class="login-bg">
-        <img src="{{ asset('assets/img/login/download.jpg') }}" alt="background" class="bg-image">
+        <img src="{{ asset('assets/img/login/download.jpeg') }}" alt="background" class="bg-image">
     </div>
     <!-- App Capsule -->
-    <div id="appCapsule" class="pt-0">
-
-        <div class="login-form mt-1">
-            <div class="section">
-                <img src="{{ asset('assets/img/sample/photo/Logo JEZ Sport@2x.png') }}" alt="image" class="form-image">
-            </div>
-            <div class="section mt-1">
-                <h1>Get Started</h1>
-                <h4>LOGIN JEZ😊!</h4>
-            </div>
-            <div class="section mt-1 mb-5">
-                @php
-                    $messageWarning = Session::get('warning');
-                @endphp
-                @if (Session::get('warning'))
-                    <div class="alert alert-outline-danger">
-                        {{ $messageWarning }}
-                    </div>
-                @endif
-                <form action="/prosesLogin" method="post">
-                    @csrf
-                    <div class="form-group boxed">
-                        <div class="input-wrapper">
-                            <input type="text" class="form-control" id="nik" name="nik"
-                                placeholder="Id Staff">
-                            <i class="clear-input">
-                                <ion-icon name="close-circle"></ion-icon>
-                            </i>
+    <div class="login-container">
+        <div id="appCapsule" class="pt-0">
+            <div class="login-form mt-1">
+                <div class="section">
+                    <img src="{{ asset('assets/img/sample/photo/Logo JEZ Sport@2x.png') }}" alt="image"
+                        class="form-image">
+                </div>
+                <div class="section mt-3 mb-3">
+                    {{-- <h1>Get Started</h1> --}}
+                    <h4>LOGIN JEZ😊!</h4>
+                </div>
+                <div class="section mt-1 mb-5">
+                    @php
+                        $messageWarning = Session::get('warning');
+                    @endphp
+                    @if (Session::get('warning'))
+                        <div class="alert alert-outline-danger">
+                            {{ $messageWarning }}
                         </div>
-                    </div>
-
-                    <div class="form-group boxed">
-                        <div class="input-wrapper">
-                            <input type="password" class="form-control" name="password" id="password"
-                                placeholder="Password">
-                            <i class="clear-input">
-                                <ion-icon name="close-circle"></ion-icon>
-                            </i>
+                    @endif
+                    <form action="/prosesLogin" method="post">
+                        @csrf
+                        <div class="form-group boxed">
+                            <div class="input-wrapper">
+                                <input type="text" class="form-control" id="nik" name="nik"
+                                    placeholder="Id Staff">
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle"></ion-icon>
+                                </i>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-links mt-2">
-                        <div>
-                            <a href="page-register.html">Register Now</a>
+                        <div class="form-group boxed">
+                            <div class="input-wrapper">
+                                <input type="password" class="form-control" name="password" id="password"
+                                    placeholder="Password">
+                                <i class="clear-input">
+                                    <ion-icon name="close-circle"></ion-icon>
+                                </i>
+                            </div>
                         </div>
-                        <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
-                    </div>
 
-                    <div class="form-button-group">
-                        <button type="submit" class="btn btn-danger btn-block btn-lg">Log in</button>
-                    </div>
+                        <div class="form-links mt-2">
+                            <div>
+                                <a href="page-register.html">Register Now</a>
+                            </div>
+                            <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
+                        </div>
 
-                </form>
+                        <div class="form-button-group">
+                            <button type="submit" class="btn btn-danger btn-block btn-lg">Login</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <style>
-            h1, h4 {
-                color: white;
-            }
+    </div>
+
+    <style>
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            /* full height of viewport */
+            width: 100vw;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        h4 {
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .login-form {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 16px;
+            box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.15);
+            padding: 40px 32px;
+            backdrop-filter: blur(6px);
+            max-width: 400px;
+            /* Lebar maksimum */
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            /* Batasi tinggi supaya tidak kepanjangan */
+            overflow-y: auto;
+            /* Scroll jika konten terlalu banyak */
+            margin: auto;
+        }
+
+        /* Untuk tampilan mobile kecil */
+        @media (max-width: 480px) {
             .login-form {
-                background: rgba(255, 255, 255, 0.25);
-                border-radius: 16px;
-                box-shadow: 0 4px 32px 0 rgba(0,0,0,0.15);
-                padding: 32px 24px 24px 24px;
-                backdrop-filter: blur(6px);
-                max-width: 420px;
-                margin: 0 auto;
+                padding: 24px 20px;
+                max-width: 90%;
+                max-height: 90vh;
             }
+        }
+        }
 
-            .form-image {
-                width: 100%;
-                max-width: 200px;
-                height: auto;
-                display: block;
-                margin: 0 auto 20px;
-            }
+        .form-image {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+        }
 
-            @media (max-width: 375px) {
-                .login-form {
-                    padding: 24px 16px 16px 16px;
-                }
+        @media (max-width: 375px) {
+            .login-form {
+                padding: 24px 16px 16px 16px;
             }
-            .form-links a {
-                color: #fff !important;
-            }
-            .form-links .text-muted {
-                color: #fff !important;
-            }
-            .form-button-group .btn {
-                background: #dc3545;
-                color: #fff;
-                border: none;
-                box-shadow: none;
-                border-radius: 8px;
-                padding: 12px 0;
-                font-size: 18px;
-                font-weight: bold;
-            }
+        }
 
-            .form-button-group .btn,
-            .form-button-group .btn:focus,
-            .form-button-group .btn:active {
-                background: #dc3545 !important;
-                color: #fff !important;
-                box-shadow: none !important;
-                outline: none !important;
-            }
+        .form-links a {
+            color: #fff !important;
+        }
 
-            .form-button-group {
-                background: transparent !important;
-                box-shadow: none !important;
-            }
-            .login-bg {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                z-index: -1;
-                overflow: hidden;
-            }
+        .form-links .text-muted {
+            color: #fff !important;
+        }
 
-            .login-bg .bg-image {
-                width: 100vw;
-                height: 100vh;
-                object-fit: cover;
-                filter: brightness(0.5);
-            }
+        .form-button-group .btn {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            box-shadow: none;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-            /* Ensure background stays behind everything including the button group */
-            .login-form, .login-form * {
-                position: relative;
-                z-index: 1;
-            }
+        .form-button-group .btn,
+        .form-button-group .btn:focus,
+        .form-button-group .btn:active {
+            background: #dc3545 !important;
+            color: #fff !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
 
+        .form-button-group {
+            background: transparent !important;
+            box-shadow: none !important;
+        }
 
-        </style>
+        .login-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .login-bg .bg-image {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+
+        /* Ensure background stays behind everything including the button group */
+        .login-form,
+        .login-form * {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 
     </div>
     <!-- * App Capsule -->

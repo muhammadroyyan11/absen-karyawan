@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\GroamingStaffController;
 use App\Http\Controllers\admin\JadwalInputController;
 use App\Http\Controllers\admin\DepartmentController;
 use App\Http\Controllers\admin\CutiRequestController;
+use App\Http\Controllers\admin\ShiftController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,15 @@ Route::middleware(['guest:user'])->group(function (){
 Route::middleware(['auth:user'])->group(function (){
     Route::get('/panel-admin', [PanelAdminController::class, 'index']);
     Route::get('/logoutAdmin', [AuthController::class, 'logoutAdmin']);
+
+    //shift
+    Route::get('shift', [ShiftController::class, 'index'])->name('shift.index');
+    Route::get('/shift/data', [ShiftController::class, 'getDatatables'])->name('shift.data');
+    Route::get('detail', [ShiftController::class, 'getDetail'])->name('shift.detail');
+    Route::get('/shift/detail/{id}', [ShiftController::class, 'detailView'])->name('shift.detail.view');
+    Route::post('/shifts/days-save', [ShiftController::class, 'daysSave'])->name('shift.days.save');
+    Route::post('/shifts/days-delete', [ShiftController::class, 'daysDelete']);
+
 
     //input jadwal
     Route::get('/jadwal-input', [JadwalInputController::class, 'index']);

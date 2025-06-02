@@ -215,8 +215,16 @@ class PresensiController extends Controller
             $output .= '</table>';
 
             $output .= '<div class="maps-container">';
-            $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $item->id . '" class="map" style="height: 200px;"></div>';
-            $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $item->id . '" class="map" style="height: 200px;"></div>';
+//            $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $item->id . '" class="map" style="height: 200px;"></div>';
+//            $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $item->id . '" class="map" style="height: 200px;"></div>';
+
+            if (!empty($item->location_in)) {
+                $output .= '<h5>Lokasi Masuk</h5><div id="mapIn' . $item->id . '" class="map" style="height: 200px;"></div>';
+            }
+
+            if (!empty($item->location_out)) {
+                $output .= '<h5>Lokasi Keluar</h5><div id="mapOut' . $item->id . '" class="map" style="height: 200px;"></div>';
+            }
             $output .= '</div>';
 
             $output .= '</div>';

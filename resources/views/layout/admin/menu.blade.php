@@ -43,6 +43,15 @@
                                 class="fa fa-circle-o"></i> History Cuti</a></li>
                 </ul>
             </li>
+            <li class="header">OPERATION SETTING</li>
+            <li class="{{ request()->is('shift') ? 'active' : '' }}">
+                <a href="{{ route('shift.index') }}">
+                    <i class="fa fa-clock-o"></i> <span>Shift</span>
+                </a>
+            </li>
+            <li class=" {{ request()->is('data-users') ? 'active' : '' }}"><a href="/data-users"><i
+                        class="fa fa-user"></i> <span>Denda</span></a></li>
+
             <li class="header">MASTER DATA</li>
             <li class="{{ request()->is('departments') ? 'active' : '' }}">
                 <a href="{{ route('departments.index') }}">

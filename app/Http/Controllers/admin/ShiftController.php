@@ -91,22 +91,35 @@ class ShiftController extends Controller
 
         if ($validated['shift_id']) {
             // update existing
-            $shift = DayShift::find($validated['shift_id']);
-            if (!$shift) return response()->json(['error' => 'Shift tidak ditemukan'], 404);
+//            $shift = DayShift::find($validated['shift_id']);
 
-            $shift->update([
-                'name_day_shift' => $validated['name_day_shift'],
-                'time_start' => $validated['time_start'],
-                'time_end' => $validated['time_end'],
-            ]);
-        } else {
-            // create new
-            $shift = DayShift::create([
-                'name_day_shift' => $validated['name_day_shift'],
-                'time_start' => $validated['time_start'],
-                'time_end' => $validated['time_end'],
-                'shift_id' => 1,
-            ]);
+//            dd($validated);
+            $shift = DB::table('day_shifts')->where('shift_id', $validated['shift_id'])->where('name_day_shift', '=',$validated['name_day_shift'])->first();
+
+            if (!$shift) {
+                $shift = DayShift::create([
+                    'name_day_shift' => $validated['name_day_shift'],
+                    'time_start' => $validated['time_start'],
+                    'time_end' => $validated['time_end'],
+                    'shift_id' => $validated['shift_id'],
+                ]);
+            } else {
+//                $shift->update([
+//                    'name_day_shift' => $validated['name_day_shift'],
+//                    'time_start' => $validated['time_start'],
+//                    'time_end' => $validated['time_end'],
+//                ]);
+
+                DB::table('day_shifts')
+                    ->where('id', $shift->id)
+                    ->update([
+                        'name_day_shift' => $validated['name_day_shift'],
+                        'time_start' => $validated['time_start'],
+                        'time_end' => $validated['time_end'],
+                        'updated_at' => now(),
+                    ]);
+            }
+//            return response()->json(['error' => 'Shift tidak ditemukan'], 404);
         }
 
         return response()->json([

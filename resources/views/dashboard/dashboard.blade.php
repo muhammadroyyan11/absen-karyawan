@@ -63,9 +63,18 @@
             </div>
         </div>
     </div>
-    <div class="section mt-2" id="presence-section">
+
+    <div class="section" id="presence-section">
         <div class="todaypresence">
             <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-warning text-center" role="alert">
+{{--                        @if(data['shift']) @endif--}}
+                        <h4 class="presencetitle"><b>Besok kamu {{ $data['shift'] }} </b> - Jangan terlambat ya</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
                 <div class="col-6">
                     <div class="card gradasigreen">
                         <div class="card-body">
@@ -79,6 +88,7 @@
                                         <ion-icon name="camera"></ion-icon>
                                     @endif
                                 </div>
+
                                 <div class="presencedetail">
                                     <h4 class="presencetitle">Masuk</h4>
                                     <span>{{ $data['presensiHarian']  != null ? $data['presensiHarian']->jam_in : 'Belum Absen' }}</span>

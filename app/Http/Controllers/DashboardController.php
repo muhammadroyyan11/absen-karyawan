@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,22 @@ class DashboardController extends Controller
             ->whereRaw('MONTH(tgl_presensi) = ?', [$month])
             ->whereRaw('YEAR(tgl_presensi) = ?', [$year])
             ->get();
+
+        $date_tommorow = new DateTime('tomorrow');
+
+        $format_date_tommorow = $date_tommorow->format('Y-m-d');
+//        dd($format_date_tommorow);
+
+
+        $shift_tommorow = DB::table('work_schedules')
+            ->join('shifts', 'work_schedules.shift_id', '=', 'shifts.id')
+            ->select('work_schedules.*', 'shifts.name_shift')
+            ->where('user_id', $id_user)->where('date', $format_date_tommorow)
+            ->first()->name_shift;
+
+//        dd($shift_tommorow);
+
+//        echo $datetime->format('Y-m-d H:i:s');
         $data = [
             'title'             => 'dashboard',
             'presensiHarian'    => DB::table('presensi')->where('u_id', $id_user)->where('tgl_presensi', $today)->first(),
@@ -58,7 +75,8 @@ class DashboardController extends Controller
             'terlambat'         => $terlambat,
             'hadir'             => $hadir,
             'cuti'              => $cuti,
-            'sakit'              => $sakit
+            'sakit'              => $sakit,
+            'shift'             => $shift_tommorow
         ];
 
 //        dd($terlambat);

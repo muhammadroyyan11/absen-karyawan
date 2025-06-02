@@ -69,8 +69,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="alert alert-warning text-center" role="alert">
-{{--                        @if(data['shift']) @endif--}}
-                        <h4 class="presencetitle"><b>Besok kamu {{ $data['shift'] }} </b> - Jangan terlambat ya</h4>
+                        @if($data['shift'] != NULL)
+                            <h4 class="presencetitle"><b>Besok kamu {{ $data['shift'] }} </b> - Jangan terlambat ya</h4>
+                        @else
+                            <h4 class="presencetitle">Jadwal belum di setting , Hubungi leader ya!</h4>
+                        @endif
+
                     </div>
                 </div>
             </div>

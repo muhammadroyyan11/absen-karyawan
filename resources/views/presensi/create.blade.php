@@ -97,7 +97,7 @@
     integrity="sha256-sA+4jvibvVVjwlTlU2d+xvAqaaKYF7dLndpk+z4gD3I=" crossorigin="" />
 
 <script>
-    let useFrontCamera = false;
+    let useFrontCamera = true;
     let cameraReady = false;
 
     var lokasi = document.getElementById('lokasi');
